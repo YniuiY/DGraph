@@ -7,12 +7,15 @@
 #ifndef ENGINE_H_
 #define ENGINE_H_
 
+#include <memory>
+
 #include "threadpool/ThreadPool.hpp"
 #include "NodeManager.h"
 
 class Engine {
  public:
-  void Init(NodeManager *);
+  Engine();
+  void Init(std::shared_ptr<NodeManager>&);
 
   /**
    * @brief 运行整个DAG，每次遍历都取出没有前置依赖的节点，加入线程池运行，直到所以节点都运行完成
@@ -22,9 +25,9 @@ class Engine {
   void Deinit();
 
  private:
-  ThreadPool* thread_pool_ptr_;
-  NodeManager* node_manager_;
-  int running_done_node_count_;
+  std::shared_ptr<ThreadPool> thread_pool_ptr_;
+  std::shared_ptr<NodeManager> node_manager_;
+  int node_have_been_run_count_;
 };
 
 #endif

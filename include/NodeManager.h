@@ -6,25 +6,25 @@
 #define NODE_MANAGER_H_
 
 #include <iostream>
-#include <vector>
+#include <memory>
 #include <set>
+#include <vector>
 
 class Node;
 class NodeManager {
  public:
-
   void Init();
 
-  std::vector<Node*> GetRunAbleNode();
+  std::vector<std::shared_ptr<Node>> GetRunAbleNode();
 
   int GetNodeCount();
 
-  void AddNode(Node*& node);
+  void AddNode(std::shared_ptr<Node>& node);
 
-  void RemoveNode(Node*& node);
+  void RemoveNode(std::shared_ptr<Node>& node);
 
  private:
-  std::set<Node*> node_set_;
+  std::set<std::shared_ptr<Node>> node_set_;
 };
 
 #endif

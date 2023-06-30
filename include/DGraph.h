@@ -5,24 +5,26 @@
 #ifndef DGRAPH_H_
 #define DGRAPH_H_
 
-#include <iostream>
-#include <vector>
-#include <set>
 #include <functional>
+#include <iostream>
+#include <set>
+#include <vector>
 
+#include "Engine.h"
 #include "Node.h"
 #include "NodeManager.h"
-#include "Engine.h"
 
 class DGraph {
  public:
   void Init();
   void Run();
   void Deinit();
-  bool RegisterNode(Node*&, std::set<Node*>const& dependency_nodes, std::string node_name);
+  bool RegisterNode(std::shared_ptr<Node>&,
+                    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+                    std::string node_name);
 
  private:
-  NodeManager node_manager_;
+  std::shared_ptr<NodeManager> node_manager_;
   Engine engine_;
 };
 

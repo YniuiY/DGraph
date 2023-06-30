@@ -1,30 +1,26 @@
 #include "NodeManager.h"
+
 #include "Node.h"
 
-void NodeManager::Init() {
-  std::cout << "NodeManager Init\n";
-}
+void NodeManager::Init() { std::cout << "NodeManager Init\n"; }
 
-std::vector<Node*> NodeManager::GetRunAbleNode() {
-  std::vector<Node*> run_able_nodes;
+std::vector<std::shared_ptr<Node>> NodeManager::GetRunAbleNode() {
+  std::vector<std::shared_ptr<Node>> run_able_nodes;
   for (auto node : node_set_) {
     if (node->IsRunable()) {
       run_able_nodes.emplace_back(node);
-      node->RunBefore();
+      node->SetNodeState(Node::NodeState::RUNNING);
     }
   }
   return run_able_nodes;
 }
 
-int NodeManager::GetNodeCount() {
-  return node_set_.size();
-}
+int NodeManager::GetNodeCount() { return node_set_.size(); }
 
-void NodeManager::AddNode(Node*& node) {
-  std::cout << "NodeManager AddNode\n";
+void NodeManager::AddNode(std::shared_ptr<Node>& node) {
   node_set_.emplace(node);
 }
 
-void NodeManager::RemoveNode(Node*& node) {
+void NodeManager::RemoveNode(std::shared_ptr<Node>& node) {
   node_set_.erase(node_set_.find(node));
 }
