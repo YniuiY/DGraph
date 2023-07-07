@@ -10,6 +10,8 @@
 #include <set>
 #include <vector>
 
+#include "JudgmentCycle.h"
+
 class Node;
 class NodeManager {
  public:
@@ -23,8 +25,11 @@ class NodeManager {
 
   void RemoveNode(std::shared_ptr<Node>& node);
 
+  bool HasCycle();
+
  private:
   std::set<std::shared_ptr<Node>> node_set_;
+  JudgmentCycle judgment_cycle_;
 };
 
 #endif

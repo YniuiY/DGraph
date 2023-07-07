@@ -4,7 +4,15 @@ void DGraph::Init() {
   std::cout << "DGraph Init\n";
   node_manager_ = std::make_shared<NodeManager>();
   node_manager_->Init();
-  engine_.Init(node_manager_);
+}
+
+void DGraph::CheckCycle() {
+  if (!node_manager_->HasCycle()) {
+    engine_.Init(node_manager_);
+  } else {
+    std::cout << "Graph has cycle\n";
+    exit(0);
+  }
 }
 
 void DGraph::Run() {

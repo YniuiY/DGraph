@@ -71,3 +71,7 @@ void Node::SetNodeState(NodeState const& state) {
 Node::NodeState Node::GetNodeState() {
   return node_state_;
 }
+
+std::set<std::shared_ptr<Node>> Node::GetRightNode() {
+  return right_be_dependency_node_;
+}

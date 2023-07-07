@@ -41,3 +41,13 @@ class MyNode5 : public Node {
     std::cout << Node::GetNodeName() << " running over\n";
   }
 };
+
+class LoopNode : public Node {
+  void run() override {
+    while (true) {
+      std::cout << Node::GetNodeName() << " running...\n";
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));
+      std::cout << Node::GetNodeName() << " run over\n";
+    }
+  }
+};

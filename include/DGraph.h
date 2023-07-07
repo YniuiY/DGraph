@@ -17,6 +17,7 @@
 class DGraph {
  public:
   void Init();
+  void CheckCycle();
   void Run();
   void Deinit();
   bool RegisterNode(std::shared_ptr<Node>&,

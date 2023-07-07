@@ -22,6 +22,11 @@ class Node {
     RUNNING_DONE = 4
   };
 
+  enum class NodeType {
+    TRIGGER = 0,
+    LOOP = 1
+  };
+
   Node();
   void Process();
 
@@ -35,11 +40,15 @@ class Node {
 
   void SetNodeName(std::string const& name);
 
+  void SetNodeType(NodeType type);
+
   std::string GetNodeName();
 
   void SetNodeState(NodeState const& state);
 
   NodeState GetNodeState();
+
+  std::set<std::shared_ptr<Node>> GetRightNode();
 
  private:
   virtual void run();
@@ -59,6 +68,8 @@ class Node {
   std::string node_name_;
 
   std::atomic<NodeState> node_state_;
+
+  NodeType node_type_;
 };
 
 #endif
