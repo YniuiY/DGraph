@@ -6,60 +6,50 @@
 #include <functional>
 using namespace std;
 
-enum Policy
-{
-    Abort,
-    Discard,
-    CallerRun
+enum Policy { Abort, Discard, CallerRun };
+
+class BaseRejectPolicy {
+ private:
+ public:
+  BaseRejectPolicy();
+  virtual ~BaseRejectPolicy();
+
+  virtual void reject(function<void()>&&);
 };
 
-class BaseRejectPolicy
-{
-private:
+class AbortPolicy : public BaseRejectPolicy {
+ public:
+  AbortPolicy();
+  ~AbortPolicy() override;
 
-public:
-    BaseRejectPolicy();
-    virtual ~BaseRejectPolicy();
-
-    virtual void reject(function<void()>&&);
+  void reject(function<void()>&&) override;
 };
 
-class AbortPolicy : public BaseRejectPolicy
-{
-public:
-    AbortPolicy();
-    ~AbortPolicy() override;
-
-    void reject(function<void()>&&) override;
+class CallerRunPolicy : public BaseRejectPolicy {
+ public:
+  CallerRunPolicy();
+  ~CallerRunPolicy() override;
+  void reject(function<void()>&&) override;
 };
 
-class CallerRunPolicy : public BaseRejectPolicy
-{
-public:
-    CallerRunPolicy();
-    ~CallerRunPolicy() override;
-    void reject(function<void()>&&) override;
+class DiscardPolicy : public BaseRejectPolicy {
+ public:
+  DiscardPolicy();
+  ~DiscardPolicy() override;
+  void reject(function<void()>&&) override;
 };
 
-class DiscardPolicy : public BaseRejectPolicy
-{
-public:
-    DiscardPolicy();
-    ~DiscardPolicy() override;
-    void reject(function<void()>&&) override;
-};
+class RejectPolicyFactory {
+ private:
+  static RejectPolicyFactory* factoryInstance;
+  BaseRejectPolicy* rejectPolicy = nullptr;
+  AbortPolicy* abortPolicy = nullptr;
+  DiscardPolicy* discardPolicy = nullptr;
+  CallerRunPolicy* callerRunPolicy = nullptr;
+  RejectPolicyFactory();
 
-class RejectPolicyFactory
-{
-private:
-    static RejectPolicyFactory* factoryInstance;
-    BaseRejectPolicy* rejectPolicy = nullptr;
-    AbortPolicy*      abortPolicy = nullptr;
-    DiscardPolicy*    discardPolicy = nullptr;
-    CallerRunPolicy*  callerRunPolicy = nullptr;
-    RejectPolicyFactory();
-public:
-    ~RejectPolicyFactory();
-    static RejectPolicyFactory* getInstance();
-    BaseRejectPolicy* getRejectPolicy(Policy);
+ public:
+  ~RejectPolicyFactory();
+  static RejectPolicyFactory* getInstance();
+  BaseRejectPolicy* getRejectPolicy(Policy);
 };
