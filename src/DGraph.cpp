@@ -10,7 +10,7 @@ void DGraph::CheckCycle() {
   if (!node_manager_->HasCycle()) {
     engine_.Init(node_manager_);
   } else {
-    std::cout << "Graph has cycle\n";
+    std::cout << "### Graph has cycle ###\n";
     exit(0);
   }
 }
