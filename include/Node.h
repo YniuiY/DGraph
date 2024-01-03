@@ -50,20 +50,25 @@ class Node {
 
   std::set<std::shared_ptr<Node>> GetRightNode();
 
+  int& GetIndegree();
+
  private:
   virtual void run();
   /**
-   * @brief 此节点的依赖的节点集合，它的前置节点
+   * @brief 此节点的依赖的节点集合（邻接表），它的前置节点
    */
   std::set<std::shared_ptr<Node>> left_dependency_node_;
   /**
-   * 依赖此节点的节点集合，它的后驱节点
+   * 依赖此节点的节点集合（邻接表），它的后驱节点
    */
   std::set<std::shared_ptr<Node>> right_be_dependency_node_;
   /**
-   * @brief 前置依赖项数，归零即可执行此节点
+   * @brief 前置依赖项数（入度），归零即可执行此节点
    */
   std::atomic<uint32_t> left_dep_count_;
+
+  /// @brief 入度（前置依赖项数）
+  int indegree_;
 
   std::string node_name_;
 

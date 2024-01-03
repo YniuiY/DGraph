@@ -35,3 +35,7 @@ bool DGraph::RegisterNode(
   node_manager_->AddNode(node);
   return true;
 }
+
+void DGraph::TopologicalSort() {
+  node_manager_->TopoSort();
+}

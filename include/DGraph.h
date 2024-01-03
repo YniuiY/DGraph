@@ -13,6 +13,7 @@
 #include "Engine.h"
 #include "Node.h"
 #include "NodeManager.h"
+#include "TopologicalSort.h"
 
 class DGraph {
  public:
@@ -23,6 +24,7 @@ class DGraph {
   bool RegisterNode(std::shared_ptr<Node>&,
                     std::set<std::shared_ptr<Node>> const& dependency_nodes,
                     std::string node_name);
+  void TopologicalSort();
 
  private:
   std::shared_ptr<NodeManager> node_manager_;

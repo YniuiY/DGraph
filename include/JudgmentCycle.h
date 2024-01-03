@@ -14,10 +14,12 @@ class JudgmentCycle {
   void Init(std::set<std::shared_ptr<Node>> const&);
   bool HasCycle();
   void CycleNodes();
-  std::stack<std::shared_ptr<Node>> GetOrder();
+  std::stack<std::shared_ptr<Node>> GetOrderNodeStack();
+  void GetBfsFrontOrder();
 
  private:
   void dfs(std::shared_ptr<Node> const&);
+  void bfs(std::shared_ptr<Node> const&);
   void check_cycle();
   bool is_cycle_;
   std::set<std::shared_ptr<Node>> marked_;

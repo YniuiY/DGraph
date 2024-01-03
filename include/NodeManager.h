@@ -9,12 +9,17 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <stack>
 
 #include "JudgmentCycle.h"
+#include "TopologicalSort.h"
 
 class Node;
 class NodeManager {
  public:
+  NodeManager();
+  ~NodeManager();
+
   void Init();
 
   std::vector<std::shared_ptr<Node>> GetRunAbleNode();
@@ -27,9 +32,18 @@ class NodeManager {
 
   bool HasCycle();
 
+  void TopoSort();
+
  private:
+  /// @brief DAG所有节点的集合
   std::set<std::shared_ptr<Node>> node_set_;
+  /// @brief DFS拓扑排序结果
+  std::stack<std::shared_ptr<Node>> order_node_stack_;
+  /// @brief 拓扑排序结果
+  std::queue<std::shared_ptr<Node>> order_node_queue_;
+  
   JudgmentCycle judgment_cycle_;
+  std::shared_ptr<TopologicalSort> topo_sort_;
 };
 
 #endif
