@@ -40,7 +40,7 @@ class NodeManager {
   /// @brief DFS拓扑排序结果
   std::stack<std::shared_ptr<Node>> order_node_stack_;
   /// @brief 拓扑排序结果
-  std::queue<std::shared_ptr<Node>> order_node_queue_;
+  std::vector<std::shared_ptr<Node>> order_node_queue_;
   
   JudgmentCycle judgment_cycle_;
   std::shared_ptr<TopologicalSort> topo_sort_;

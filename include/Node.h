@@ -16,10 +16,11 @@ class Node {
  public:
   enum class NodeState {
     CREATED = 0,
-    INITING = 1,
-    INITED = 2,
-    RUNNING = 3,
-    RUNNING_DONE = 4
+    INITING,
+    INITED,
+    RUNNING_WAITING,
+    RUNNING,
+    RUNNING_DONE
   };
 
   enum class NodeType {
@@ -66,6 +67,9 @@ class Node {
    * @brief 前置依赖项数（入度），归零即可执行此节点
    */
   std::atomic<uint32_t> left_dep_count_;
+
+  // 记录最初的入度，在运行结束后恢复入度，准备下一轮运行
+  std::uint32_t static_left_dep_count_;
 
   /// @brief 入度（前置依赖项数）
   int indegree_;

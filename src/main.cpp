@@ -3,14 +3,14 @@
 #include "DGraph.h"
 #include "MyNode.h"
 
-#define TEST_DIRECTED_GRAPH_1 1
+#define TEST_DIRECTED_GRAPH_1 0
 #define TEST_DIRECTED_GRAPH_2 0
-#define TEST_DIRECTED_GRAPH_3 0
+#define TEST_DIRECTED_GRAPH_3 1
 
 int main() {
   try {
    #if TEST_DIRECTED_GRAPH_1
-    std::shared_ptr<Node> a = std::make_shared<MyNode1>();
+    std::shared_ptr<Node> a = std::make_shared<MyNode5>();
     std::shared_ptr<Node> b = std::make_shared<MyNode5>();
     std::shared_ptr<Node> c = std::make_shared<MyNode3>();
     std::shared_ptr<Node> d = std::make_shared<MyNode1>();
@@ -27,8 +27,8 @@ int main() {
     graph->RegisterNode(d, {a}, "NodeD");     // 注册节点d，命名为NodeD，依赖节点a
     graph->RegisterNode(e, {b, c}, "NodeE");  // 注册节点e，命名为NodeE，依赖节点b和c
     graph->RegisterNode(f, {d, e}, "NodeF");  // 注册节点f，命名为NodeF，依赖节点d和e
-    graph->RegisterNode(g, {}, "NodeG");      // 注册节点g，命名为NodeG
-    graph->RegisterNode(h, {}, "LoopNode1"); // 注册一个loop节点h,
+    // graph->RegisterNode(g, {}, "NodeG");      // 注册节点g，命名为NodeG
+    // graph->RegisterNode(h, {}, "LoopNode1"); // 注册一个loop节点h,
     // graph->RegisterNode(c, {f}, "NodeC");     // 注册节点c，命名为NodeC，依赖节点f。注意：此项会使graph成环, 图结构见image目录Directed_ring_graph.jpg
    #endif
 
@@ -64,15 +64,18 @@ int main() {
    #endif
 
    #if TEST_DIRECTED_GRAPH_3
-    std::shared_ptr<Node> a = std::make_shared<LoopNode>();
-    std::shared_ptr<Node> b = std::make_shared<MyNode5>();
-    std::shared_ptr<Node> c = std::make_shared<MyNode5>();
-    std::shared_ptr<Node> d = std::make_shared<MyNode5>();
-    std::shared_ptr<Node> e = std::make_shared<MyNode5>();
+    std::shared_ptr<Node> a = std::make_shared<MyNode10>();
+    std::shared_ptr<Node> b = std::make_shared<MyNode3>();
+    std::shared_ptr<Node> c = std::make_shared<MyNode3>();
+    std::shared_ptr<Node> d = std::make_shared<MyNode2>();
+    std::shared_ptr<Node> e = std::make_shared<MyNode3>();
     std::shared_ptr<Node> f = std::make_shared<MyNode5>();
     std::shared_ptr<Node> g = std::make_shared<MyNode5>();
     std::shared_ptr<Node> h = std::make_shared<MyNode5>();
-    std::shared_ptr<Node> i = std::make_shared<LoopNode>();
+    std::shared_ptr<Node> i = std::make_shared<MyNode1>();
+    std::shared_ptr<Node> j = std::make_shared<MyNode1>();
+    std::shared_ptr<Node> k = std::make_shared<MyNode1>();
+
 
 
     DGraph* graph = new DGraph();
@@ -85,7 +88,9 @@ int main() {
     graph->RegisterNode(f, {e}, "Stitch");      // 注册节点f，命名为Stitch，依赖节点e
     graph->RegisterNode(g, {b}, "Desensitize"); // 注册节点g，命名为Desensitize，依赖节点b
     graph->RegisterNode(h, {g}, "H265");        // 注册节点h，命名为H265，依赖节点g
-    graph->RegisterNode(i, {}, "Pub");          // 注册节点i，命名为Pub，无依赖节点
+    graph->RegisterNode(i, {d}, "PubCyl");      // 注册节点i，命名为Pub，无依赖节点
+    graph->RegisterNode(j, {f}, "PubStitch");   // 注册节点i，命名为Pub，无依赖节点
+    graph->RegisterNode(k, {h}, "PubH265");     // 注册节点i，命名为Pub，无依赖节点
    #endif
 
 
@@ -93,7 +98,7 @@ int main() {
     graph->TopologicalSort();
 
     graph->Run();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(30));
     graph->Deinit();
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;

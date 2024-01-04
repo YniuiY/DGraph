@@ -10,7 +10,7 @@ TopologicalSort::TopologicalSort(std::set<std::shared_ptr<Node>> adjs) {
   adjs_ = adjs;
 }
 
-std::queue<std::shared_ptr<Node>> TopologicalSort::Sort() {
+std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
   /// @brief 存储入度为0的节点
   std::queue<std::shared_ptr<Node>> queue;
   /// @brief 将邻接表中入度为零的节点加入队列
@@ -29,7 +29,7 @@ std::queue<std::shared_ptr<Node>> TopologicalSort::Sort() {
   while (!queue.empty()) {
     auto node = queue.front();
     queue.pop();
-    topological_order_.push(node);
+    topological_order_.push_back(node);
 
     for (auto node : node->GetRightNode()) {
       if (--node->GetIndegree() == 0) {
@@ -83,11 +83,9 @@ void TopologicalSort::dfs(std::shared_ptr<Node> node) {
 }
 
 void TopologicalSort::PrintOrder() {
-  std::queue<std::shared_ptr<Node>> queue{topological_order_};
+  std::vector<std::shared_ptr<Node>> queue{topological_order_};
   std::cout << "Topological order: ";
-  while (!queue.empty()) {
-    auto node = queue.front();
-    queue.pop();
+  for (auto node : topological_order_) {
     std::cout << node->GetNodeName() << " ";
   }
   std::cout << std::endl;

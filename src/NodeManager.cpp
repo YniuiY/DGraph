@@ -16,16 +16,25 @@ void NodeManager::Init() {
  */
 std::vector<std::shared_ptr<Node>> NodeManager::GetRunAbleNode() {
   std::vector<std::shared_ptr<Node>> run_able_nodes;
-  while (!order_node_queue_.empty()) {
-    auto node = order_node_queue_.front();
+  // 可以按照DAG一直运行
+  for (auto node : order_node_queue_) {
     if (node->IsRunable()) {
-      std::cout << "NodeManager GetRunAbleNode " << node->GetNodeName() << std::endl;
+      // std::cout << "NodeManager GetRunAbleNode " << node->GetNodeName() << std::endl;
       run_able_nodes.emplace_back(node);
-      order_node_queue_.pop();
-    } else {
-      break;
     }
   }
+
+  // 只能运行一轮
+  // while (!order_node_queue_.empty()) {
+  //   auto node = order_node_queue_.front();
+  //   if (node->IsRunable()) {
+  //     std::cout << "NodeManager GetRunAbleNode " << node->GetNodeName() << std::endl;
+  //     run_able_nodes.emplace_back(node);
+  //     order_node_queue_.erase(order_node_queue_.begin();
+  //   } else {
+  //     break;
+  //   }
+  // }
   return run_able_nodes;
 }
 

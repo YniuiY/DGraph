@@ -32,18 +32,32 @@ void Engine::Init(std::shared_ptr<NodeManager>& node_manager) {
 }
 
 void Engine::Run() {
+  is_running_ = true;
   int total_node_count{node_manager_->GetNodeCount()};
   std::cout << "\n\n************** Engine Run total node count: "
             << total_node_count << " ***************\n"
             << std::endl;
 
-  while (node_have_been_run_count_ < total_node_count) {
-    for (auto node : node_manager_->GetRunAbleNode()) {
-      std::cout << "Add " << node->GetNodeName() << " to thread pool\n";
-      thread_pool_ptr_->execute(std::bind(&Node::Process, node));
-      node_have_been_run_count_++;
+  // 可以一直按照DAG顺序运行
+  thread_pool_ptr_->execute([this]() {
+    while (is_running_) {
+      for (auto node : node_manager_->GetRunAbleNode()) {
+        std::cout << "Add " << node->GetNodeName() << " to thread pool\n";
+        thread_pool_ptr_->execute(std::bind(&Node::Process, node));
+      }
     }
-  }
+  });
+
+  // 只能运行一轮
+  // while (node_have_been_run_count_ < total_node_count) {
+  //   for (auto node : node_manager_->GetRunAbleNode()) {
+  //     std::cout << "Add " << node->GetNodeName() << " to thread pool\n";
+  //     thread_pool_ptr_->execute(std::bind(&Node::Process, node));
+  //     node_have_been_run_count_++;
+  //   }
+  // }
 }
 
-void Engine::Deinit() {}
+void Engine::Deinit() {
+  is_running_ = false;
+}

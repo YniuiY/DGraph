@@ -28,6 +28,7 @@ class Engine {
   std::shared_ptr<ThreadPool> thread_pool_ptr_;
   std::shared_ptr<NodeManager> node_manager_;
   int node_have_been_run_count_;
+  bool is_running_;
 };
 
 #endif

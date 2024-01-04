@@ -22,7 +22,10 @@ void DGraph::Run() {
   engine_.Run();
 }
 
-void DGraph::Deinit() {}
+void DGraph::Deinit() {
+  std::cout << "DGraph Deinit\n";
+  engine_.Deinit();
+}
 
 bool DGraph::RegisterNode(
     std::shared_ptr<Node>& node,
