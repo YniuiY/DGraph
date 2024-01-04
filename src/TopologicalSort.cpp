@@ -38,7 +38,13 @@ std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
     }
   }
 
+  /**
+   * 在环上的节点入度不可能减为0，
+   * 退出上面while循环的时候，不能遍历全部的节点
+   * 所以topological_order_的元素少于adjs_的元素数，就可以证明有环
+   */
   if (topological_order_.size() != adjs_.size()) {
+    std::cout << "topological order node: " << topological_order_.size() << ", adjs node: " << adjs_.size() << std::endl;
     throw std::runtime_error("There is a cycle in the graph.");
   } else {
     return topological_order_;
