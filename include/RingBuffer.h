@@ -18,7 +18,7 @@ public:
     /// @brief  元素入队，队满则入队失败
     /// @param item 入队元素
     /// @return 入队是否成功
-    bool enqueue(const Type& item) {
+    bool Enqueue(const Type& item) {
       if (read_ == ((write_ + 1) % size_)) {
         // 队满
         return false;
@@ -30,7 +30,7 @@ public:
 
     /// @brief 强制将元素入队，队满则覆盖旧数据
     /// @param item 入队元素
-    void enqueue_force(const Type& item) {
+    void EnqueueForce(const Type& item) {
       if (read_ == ((write_ + 1) % size_)) {
         // 队满，覆盖最早的数据
         read_ = (read_ + 1) % size_;
@@ -46,7 +46,7 @@ public:
     /// @brief 将最旧的元素出队，如果队空则出队失败
     /// @param item 出队的元素
     /// @return 出队是否成功
-    bool dequeue(Type& item) {
+    bool Dequeue(Type& item) {
       if (write_ == read_) {
         // 队空
         return false;
@@ -58,19 +58,19 @@ public:
 
     /// @brief 是否队空
     /// @return 空：true
-    bool isEmpty() const {
+    bool IsEmpty() const {
       return write_ == read_;
     }
 
     /// @brief 是否队满
     /// @return 满：true
-    bool isFull() const {
+    bool IsFull() const {
       return (write_ + 1) % size_ == read_;
     }
 
     /// @brief 获取环形缓冲区大小
     /// @return 缓冲区大小
-    uint32_t getSize() const {
+    uint32_t GetSize() const {
       return size_;
     }
 private:
