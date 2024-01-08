@@ -2,6 +2,7 @@
 #include <functional>
 #include "DGraph.h"
 #include "MyNode.h"
+#include "RingBuffer.h"
 
 #define TEST_DIRECTED_GRAPH_1 1
 #define TEST_DIRECTED_GRAPH_2 0
