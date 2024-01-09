@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <array>
+#include <atomic>
 
 template <class Type, uint32_t size>
 class RingBuffer
@@ -20,6 +21,7 @@ public:
     /// @return 入队是否成功
     bool Enqueue(const Type& item) {
       if (read_ == ((write_ + 1) % size_)) {
+        // 写索引和读索引之间空一个元素
         // 队满
         return false;
       }
@@ -32,11 +34,11 @@ public:
     /// @param item 入队元素
     void EnqueueForce(const Type& item) {
       if (read_ == ((write_ + 1) % size_)) {
+        // 写索引和读索引之间空一个元素
         // 队满，覆盖最早的数据
         read_ = (read_ + 1) % size_;
         std::cout << "Warning: Ring Buffer is full, overwriting the oldest data." << std::endl;
         std::cout << "read index: " << read_ << std::endl;
-        
       }
       std::cout << "write index: " << write_ << std::endl;
       data_.at(write_) = item;
@@ -75,8 +77,8 @@ public:
     }
 private:
     std::array<Type, size> data_;
-    uint32_t write_;
-    uint32_t read_;
+    std::atomic<uint32_t> write_;
+    std::atomic<uint32_t> read_;
     uint32_t size_;
 };
 
