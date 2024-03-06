@@ -2,8 +2,8 @@
 // 写索引和读索引之间始终空一个元素
 // 读写索引重合则队列为空
 
-#ifndef RingBuffer_h
-#define RingBuffer_h
+#ifndef RING_BUFFER_H
+#define RING_BUFFER_H
 
 #include <iostream>
 #include <array>
@@ -19,7 +19,7 @@ public:
     /// @brief  元素入队，队满则入队失败
     /// @param item 入队元素
     /// @return 入队是否成功
-    bool Enqueue(const Type& item) {
+    bool Push(const Type& item) {
       if (read_ == ((write_ + 1) % size_)) {
         // 写索引和读索引之间空一个元素
         // 队满
@@ -32,7 +32,7 @@ public:
 
     /// @brief 强制将元素入队，队满则覆盖旧数据
     /// @param item 入队元素
-    void EnqueueForce(const Type& item) {
+    void PushForce(const Type& item) {
       if (read_ == ((write_ + 1) % size_)) {
         // 写索引和读索引之间空一个元素
         // 队满，覆盖最早的数据
@@ -48,7 +48,7 @@ public:
     /// @brief 将最旧的元素出队，如果队空则出队失败
     /// @param item 出队的元素
     /// @return 出队是否成功
-    bool Dequeue(Type& item) {
+    bool Pop(Type& item) {
       if (write_ == read_) {
         // 队空
         return false;
@@ -83,4 +83,4 @@ private:
 };
 
 
-#endif //RingBuffer_h
+#endif //RING_BUFFER_H
