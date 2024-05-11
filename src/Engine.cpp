@@ -5,51 +5,53 @@
 #include "Node.h"
 #include "GraphManager.h"
 
-Engine::Engine() : node_have_been_run_count_{0}, graph_manager_{nullptr} {}
+Engine::Engine() : is_running_(false), thread_pool_ptr_(nullptr){}
 
-void Engine::Init(std::shared_ptr<GraphManager>& graph_manager) {
+void Engine::Init(std::set<shared_ptr<Node>> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr) {
   std::cout << "Engine Init\n";
-  graph_manager_ = graph_manager;
-
-  int maxCount = 18;
-  int coreCount = 8;
-  int taskQueueLength = 8;
-  Policy policy = Discard;
-  int liveTime = 2;
-  Unit unit = Second;
-
-  std::cout << "\n**************************************************"
-            << "\nInit thread pool:\nmax thread count: " << maxCount
-            << "\ncore thread count: " << coreCount
-            << "\ntask queu length: " << taskQueueLength
-            << "\npolicy: " << policy
-            << "\nempty thread live time: " << liveTime
-            << "\nlive time unit: " << unit
-            << "\n*************************************************\n"
-            << std::endl;
-  thread_pool_ptr_ = std::make_shared<ThreadPool>(
-      maxCount, coreCount, taskQueueLength, policy, liveTime, unit);
+  node_set_ = node_set;
+  thread_pool_ptr_ = thread_pool_ptr;
+  find_entry_node();
 }
 
 void Engine::Run() {
+  std::cout << "Engine Run\n";
   is_running_ = true;
-  int total_node_count{graph_manager_->GetNodeCount()};
-  std::cout << "\n\n************** Engine Run total node count: "
-            << total_node_count << " ***************\n"
-            << std::endl;
 
-  // 可以一直按照DAG顺序运行
-  thread_pool_ptr_->execute([this]() {
-    while (is_running_) {
-      for (auto node : graph_manager_->GetRunAbleNode()) {
-        std::cout << "Add " << node->GetNodeName() << " to thread pool\n";
-        thread_pool_ptr_->execute(std::bind(&Node::Process, node));
-      }
-    }
-  });
-
+  // 可以一直按照DAG运行
+  for (auto node : entry_nodes) {
+    thread_pool_ptr_->execute(std::bind(&Engine::node_run, this, node));
+  }
 }
 
 void Engine::Deinit() {
   is_running_ = false;
+}
+
+void Engine::run_before() {
+  for (auto node : node_set_) {
+    //
+  }
+}
+
+void Engine::node_run(std::shared_ptr<Node> const& node) {
+  node->Process();
+  node_run_after(node);
+}
+
+void Engine::node_run_after(std::shared_ptr<Node> const& node) {
+  for (auto node_after : node->GetRightNode()) {
+    if (node_after->GetIndegree() <= 0) {
+      thread_pool_ptr_->execute(std::bind(&Engine::node_run, this, node_after));
+    }
+  }
+}
+
+void Engine::find_entry_node() {
+  for (auto node : node_set_) {
+    if (node->GetIndegree() == 0) {
+      entry_nodes.emplace_back(node);
+      std::cout << "entry node: " << node->GetNodeName() << "\n";
+    }
+  }
 }

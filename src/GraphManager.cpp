@@ -1,30 +1,33 @@
 #include "GraphManager.h"
 
 #include "Node.h"
+#include "Engine.h"
+#include "threadpool/ThreadPool.hpp"
+#include "TopologicalSort.h"
+#include "JudgmentCycle.h"
 
-GraphManager::GraphManager() {
+GraphManager::GraphManager(): engine_{std::make_shared<Engine>()} {
+
 }
 
 GraphManager::~GraphManager() {}
 
 void GraphManager::Init() { 
   std::cout << "GraphManager Init\n";
+  engine_->Init(node_set_, thread_pool_);
+  std::cout << "GraphManager Init Done\n";
 }
 
-/**
- * 根据拓扑排序的顺序，依次检查节点是否可执行
- */
-std::vector<std::shared_ptr<Node>> GraphManager::GetRunAbleNode() {
-  std::vector<std::shared_ptr<Node>> run_able_nodes;
-  // 可以按照DAG一直运行
-  for (auto node : order_node_queue_) {
-    if (node->IsRunable()) {
-      // std::cout << "GraphManager GetRunAbleNode " << node->GetNodeName() << std::endl;
-      run_able_nodes.emplace_back(node);
-    }
-  }
+void GraphManager::Run() {
+  engine_->Run();
+}
 
-  return run_able_nodes;
+void GraphManager::Deinit() {
+  engine_->Deinit();
+}
+
+void GraphManager::SetThreadPool(std::shared_ptr<ThreadPool> const& thread_pool) {
+  thread_pool_ = thread_pool;
 }
 
 int GraphManager::GetNodeCount() { return node_set_.size(); }
@@ -40,9 +43,9 @@ void GraphManager::RemoveNode(std::shared_ptr<Node>& node) {
 
 bool GraphManager::HasCycle() {
   bool ret = false;
-  judgment_cycle_.Init(node_set_); 
+  judgment_cycle_->Init(node_set_); 
   // judgment_cycle_.GetBfsFrontOrder();
-  ret = judgment_cycle_.HasCycle();
+  ret = judgment_cycle_->HasCycle();
   // order_node_stack_ = judgment_cycle_.GetOrderNodeStack();
 
   return ret;

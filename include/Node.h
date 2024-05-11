@@ -24,8 +24,8 @@ class Node {
   };
 
   enum class NodeType {
-    TRIGGER = 0,
-    LOOP = 1
+    COMMON = 0,
+    REGION = 1
   };
 
   Node();
@@ -43,6 +43,8 @@ class Node {
 
   void SetNodeType(NodeType type);
 
+  NodeType GetNodeType();
+
   std::string GetNodeName();
 
   void SetNodeState(NodeState const& state);
@@ -54,6 +56,10 @@ class Node {
   std::set<std::shared_ptr<Node>> GetLeftNode();
 
   int& GetIndegree();
+
+  void SetLoopCount(int const& loop_count);
+
+  int GetLoopCount();
 
  private:
   virtual void run();
@@ -82,6 +88,8 @@ class Node {
   std::atomic<NodeState> node_state_;
 
   NodeType node_type_;
+
+  int loop_count_;
 };
 
 #endif

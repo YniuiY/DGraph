@@ -11,10 +11,12 @@
 #include <vector>
 #include <stack>
 
-#include "JudgmentCycle.h"
-#include "TopologicalSort.h"
-
+class JudgmentCycle;
+class TopologicalSort;
+class Engine;
+class ThreadPool;
 class Node;
+
 class GraphManager {
  public:
   GraphManager();
@@ -22,7 +24,11 @@ class GraphManager {
 
   void Init();
 
-  std::vector<std::shared_ptr<Node>> GetRunAbleNode();
+  void Run();
+
+  void Deinit();
+
+  void SetThreadPool(std::shared_ptr<ThreadPool> const& thread_pool); 
 
   int GetNodeCount();
 
@@ -42,8 +48,12 @@ class GraphManager {
   /// @brief 拓扑排序结果
   std::vector<std::shared_ptr<Node>> order_node_queue_;
   
-  JudgmentCycle judgment_cycle_;
+  std::shared_ptr<JudgmentCycle> judgment_cycle_;
   std::shared_ptr<TopologicalSort> topo_sort_;
+
+  std::shared_ptr<Engine> engine_;
+
+  std::shared_ptr<ThreadPool> thread_pool_;
 };
 
 #endif

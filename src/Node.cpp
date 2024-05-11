@@ -5,13 +5,16 @@
 
 Node::Node()
     : left_dep_count_{0},
+      loop_count_{1},
       node_state_{NodeState::CREATED} {
 
 }
 
 void Node::Process() {
   RunBefore();
-  run();
+  for (int i = 0; i < loop_count_; i++) {
+    run();
+  }
   RunAfter();
 }
 
@@ -31,8 +34,8 @@ void Node::RunAfter() {
     node->left_dep_count_--;
   }
   // 运行结束后重置本节点入度
-  left_dep_count_ = static_left_dep_count_;
-  std::cout << node_name_ << " reset left_dep_count_: " << left_dep_count_ << std::endl;
+  // left_dep_count_ = static_left_dep_count_;
+  // std::cout << node_name_ << " reset left_dep_count_: " << left_dep_count_ << std::endl;
   node_state_ = NodeState::RUNNING_DONE;
 }
 
@@ -90,4 +93,20 @@ std::set<std::shared_ptr<Node>> Node::GetLeftNode() {
 
 int& Node::GetIndegree() {
   return indegree_;
+}
+
+void Node::SetNodeType(NodeType type) {
+  node_type_ = type;
+}
+
+Node::NodeType Node::GetNodeType() {
+  return node_type_;
+}
+
+void Node::SetLoopCount(int const& loop_count) {
+  loop_count_ = loop_count;
+}
+
+int Node::GetLoopCount() {
+  return loop_count_;
 }
