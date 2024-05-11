@@ -1,5 +1,8 @@
 #include "Node.h"
 
+#include "ParamManager/ParamManager.h"
+#include "Utils/TimeUtil.h"
+
 Node::Node()
     : left_dep_count_{0},
       node_state_{NodeState::CREATED} {
@@ -35,7 +38,7 @@ void Node::RunAfter() {
 
 bool Node::IsRunable() {
   bool ret{false};
-  // 节点没有running 且 节点没有执行完成 且 前置依赖项为0
+  // 节点前置依赖项为0 且 不是正在执行状态 且 不是准备执行状态 
   if (left_dep_count_ == 0 &&
       node_state_ != NodeState::RUNNING &&
       node_state_ != NodeState::RUNNING_WAITING) {
@@ -79,6 +82,10 @@ Node::NodeState Node::GetNodeState() {
 
 std::set<std::shared_ptr<Node>> Node::GetRightNode() {
   return right_be_dependency_node_;
+}
+
+std::set<std::shared_ptr<Node>> Node::GetLeftNode() {
+  return left_dependency_node_;
 }
 
 int& Node::GetIndegree() {

@@ -51,10 +51,13 @@ class Node {
 
   std::set<std::shared_ptr<Node>> GetRightNode();
 
+  std::set<std::shared_ptr<Node>> GetLeftNode();
+
   int& GetIndegree();
 
  private:
   virtual void run();
+
   /**
    * @brief 此节点的依赖的节点集合（邻接表），它的前置节点
    */

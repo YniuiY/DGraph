@@ -2,7 +2,6 @@
 #include <functional>
 #include "DGraph.h"
 #include "MyNode.h"
-#include "RingBuffer.h"
 
 #define TEST_DIRECTED_GRAPH_1 1
 #define TEST_DIRECTED_GRAPH_2 0
@@ -30,7 +29,7 @@ int main() {
     graph->RegisterNode(f, {d, e}, "NodeF");  // 注册节点f，命名为NodeF，依赖节点d和e
     // graph->RegisterNode(g, {}, "NodeG");      // 注册节点g，命名为NodeG
     // graph->RegisterNode(h, {}, "LoopNode1"); // 注册一个loop节点h,
-    graph->RegisterNode(c, {f}, "NodeC");     // 注册节点c，命名为NodeC，依赖节点f。注意：此项会使graph成环, 图结构见image目录Directed_ring_graph.jpg
+    // graph->RegisterNode(c, {f}, "NodeC");     // 注册节点c，命名为NodeC，依赖节点f。注意：此项会使graph成环, 图结构见image目录Directed_ring_graph.jpg
    #endif
 
    #if TEST_DIRECTED_GRAPH_2

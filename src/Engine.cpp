@@ -3,13 +3,13 @@
 #include <functional>
 
 #include "Node.h"
-#include "NodeManager.h"
+#include "GraphManager.h"
 
-Engine::Engine() : node_have_been_run_count_{0} {}
+Engine::Engine() : node_have_been_run_count_{0}, graph_manager_{nullptr} {}
 
-void Engine::Init(std::shared_ptr<NodeManager>& node_manager) {
+void Engine::Init(std::shared_ptr<GraphManager>& graph_manager) {
   std::cout << "Engine Init\n";
-  node_manager_ = node_manager;
+  graph_manager_ = graph_manager;
 
   int maxCount = 18;
   int coreCount = 8;
@@ -33,7 +33,7 @@ void Engine::Init(std::shared_ptr<NodeManager>& node_manager) {
 
 void Engine::Run() {
   is_running_ = true;
-  int total_node_count{node_manager_->GetNodeCount()};
+  int total_node_count{graph_manager_->GetNodeCount()};
   std::cout << "\n\n************** Engine Run total node count: "
             << total_node_count << " ***************\n"
             << std::endl;
@@ -41,21 +41,13 @@ void Engine::Run() {
   // 可以一直按照DAG顺序运行
   thread_pool_ptr_->execute([this]() {
     while (is_running_) {
-      for (auto node : node_manager_->GetRunAbleNode()) {
+      for (auto node : graph_manager_->GetRunAbleNode()) {
         std::cout << "Add " << node->GetNodeName() << " to thread pool\n";
         thread_pool_ptr_->execute(std::bind(&Node::Process, node));
       }
     }
   });
 
-  // 只能运行一轮
-  // while (node_have_been_run_count_ < total_node_count) {
-  //   for (auto node : node_manager_->GetRunAbleNode()) {
-  //     std::cout << "Add " << node->GetNodeName() << " to thread pool\n";
-  //     thread_pool_ptr_->execute(std::bind(&Node::Process, node));
-  //     node_have_been_run_count_++;
-  //   }
-  // }
 }
 
 void Engine::Deinit() {

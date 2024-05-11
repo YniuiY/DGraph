@@ -9,12 +9,11 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <memory>
 
-#include "Engine.h"
-#include "Node.h"
-#include "NodeManager.h"
-#include "TopologicalSort.h"
-
+class Engine;
+class Node;
+class GraphManager;
 class DGraph {
  public:
   void Init();
@@ -27,8 +26,8 @@ class DGraph {
   void TopologicalSort();
 
  private:
-  std::shared_ptr<NodeManager> node_manager_;
-  Engine engine_;
+  std::shared_ptr<GraphManager> graph_manager_;
+  std::shared_ptr<Engine> engine_;
 };
 
 #endif

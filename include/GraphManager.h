@@ -1,9 +1,9 @@
 /**
- * 存储整个DAG的节点，后续可能需要这个类分析DAG是否有环。
+ * 存储整个DAG的节点，分析DAG是否有环，管理维护拓扑。
  */
 
-#ifndef NODE_MANAGER_H_
-#define NODE_MANAGER_H_
+#ifndef GRAPH_MANAGER_H_
+#define GRAPH_MANAGER_H_
 
 #include <iostream>
 #include <memory>
@@ -15,10 +15,10 @@
 #include "TopologicalSort.h"
 
 class Node;
-class NodeManager {
+class GraphManager {
  public:
-  NodeManager();
-  ~NodeManager();
+  GraphManager();
+  ~GraphManager();
 
   void Init();
 
@@ -35,7 +35,7 @@ class NodeManager {
   void TopoSort();
 
  private:
-  /// @brief DAG所有节点的集合
+  /// @brief DAG所有节点的集合，因为每个节点都要自己的邻接点，所以这个set就是完整的邻接表
   std::set<std::shared_ptr<Node>> node_set_;
   /// @brief DFS拓扑排序结果
   std::stack<std::shared_ptr<Node>> order_node_stack_;
