@@ -13,8 +13,13 @@ link_directories(${PROJECT_SOURCE_DIR}/../output/DGraph/lib)
 include_directories(${PROJECT_SOURCE_DIR}/include
                     ${PROJECT_SOURCE_DIR}/../output/DGraph/include)
 
-aux_source_directory(./src SRCS)
 
-add_executable(sample ${SRCS})
+set(DGRAPH_TUTORIAL_LIST
+  sample
+  sample-region
+)
 
-target_link_libraries(sample dgraph pthread)
+foreach(tut ${DGRAPH_TUTORIAL_LIST})
+    add_executable(${tut} ./src/${tut}.cpp)
+    target_link_libraries(${tut} dgraph pthread)
+endforeach()

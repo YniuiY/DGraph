@@ -14,6 +14,7 @@
 class Engine;
 class Node;
 class GraphManager;
+class ThreadPool;
 class DGraph {
  public:
   void Init();
@@ -23,11 +24,16 @@ class DGraph {
   bool RegisterNode(std::shared_ptr<Node>&,
                     std::set<std::shared_ptr<Node>> const& dependency_nodes,
                     std::string node_name);
+
+  bool RegisterNode(std::shared_ptr<Node>&,
+                    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+                    std::string node_name,
+                    int const& loop_count);
   void TopologicalSort();
 
  private:
   std::shared_ptr<GraphManager> graph_manager_;
-  std::shared_ptr<Engine> engine_;
+  std::shared_ptr<ThreadPool> thread_pool_;
 };
 
 #endif
