@@ -42,6 +42,7 @@ void Engine::node_run(std::shared_ptr<Node> const& node) {
 void Engine::node_run_after(std::shared_ptr<Node> const& node) {
   for (auto node_after : node->GetRightNode()) {
     if (node_after->GetIndegree() <= 0) {
+      std::cout << node->GetNodeName() << " right node: " << node_after->GetNodeName() << " indegree is 0\n";
       thread_pool_ptr_->execute(std::bind(&Engine::node_run, this, node_after));
     }
   }

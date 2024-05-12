@@ -17,6 +17,8 @@ class GraphManager;
 class ThreadPool;
 class DGraph {
  public:
+  DGraph();
+  ~DGraph() = default;
   void Init();
   void CheckCycle();
   void Run();

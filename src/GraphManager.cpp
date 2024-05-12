@@ -6,15 +6,21 @@
 #include "TopologicalSort.h"
 #include "JudgmentCycle.h"
 
-GraphManager::GraphManager(): engine_{std::make_shared<Engine>()} {
-
+GraphManager::GraphManager(): engine_{std::make_shared<Engine>()},
+                              judgment_cycle_{std::make_shared<JudgmentCycle>()},
+                              topo_sort_{nullptr} {
+  std::cout << "GraphManager()\n";
 }
 
 GraphManager::~GraphManager() {}
 
-void GraphManager::Init() { 
+void GraphManager::Init() {
   std::cout << "GraphManager Init\n";
   engine_->Init(node_set_, thread_pool_);
+  for (auto node: node_set_) {
+    node->SetThreadPool(thread_pool_);
+    node->Init();
+  }
   std::cout << "GraphManager Init Done\n";
 }
 

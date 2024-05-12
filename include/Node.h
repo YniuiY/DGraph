@@ -12,6 +12,7 @@
 #include <set>
 #include <vector>
 
+class ThreadPool;
 class Node {
  public:
   enum class NodeState {
@@ -29,6 +30,9 @@ class Node {
   };
 
   Node();
+
+  virtual void Init();
+
   void Process();
 
   void RunBefore();
@@ -55,11 +59,15 @@ class Node {
 
   std::set<std::shared_ptr<Node>> GetLeftNode();
 
-  int& GetIndegree();
+  int GetIndegree();
+
+  int& GetLeftDepCount();
 
   void SetLoopCount(int const& loop_count);
 
   int GetLoopCount();
+
+  void SetThreadPool(std::shared_ptr<ThreadPool> const& tp);
 
  private:
   virtual void run();
@@ -73,9 +81,9 @@ class Node {
    */
   std::set<std::shared_ptr<Node>> right_be_dependency_node_;
   /**
-   * @brief 前置依赖项数（入度），归零即可执行此节点
+   * @brief 前置依赖项数（入度）， 拓扑排序用
    */
-  std::atomic<uint32_t> left_dep_count_;
+  int left_dep_count_;
 
   // 记录最初的入度，在运行结束后恢复入度，准备下一轮运行
   std::uint32_t static_left_dep_count_;
@@ -90,6 +98,9 @@ class Node {
   NodeType node_type_;
 
   int loop_count_;
+
+ protected:
+  std::shared_ptr<ThreadPool> tp_;
 };
 
 #endif

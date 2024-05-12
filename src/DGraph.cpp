@@ -5,6 +5,10 @@
 #include "GraphManager.h"
 #include "Node.h"
 
+DGraph::DGraph(): graph_manager_{std::make_shared<GraphManager>()} {
+
+}
+
 void DGraph::Init() {
   std::cout << "DGraph Init\n";
 
@@ -28,7 +32,6 @@ void DGraph::Init() {
   thread_pool_ = std::make_shared<ThreadPool>(
       maxCount, coreCount, taskQueueLength, policy, liveTime, unit);
 
-  graph_manager_ = std::make_shared<GraphManager>();
   graph_manager_->SetThreadPool(thread_pool_);
   graph_manager_->Init();
 }

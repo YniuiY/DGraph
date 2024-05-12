@@ -20,7 +20,6 @@ int main() {
     std::shared_ptr<Node> h = std::make_shared<LoopNode>();
 
     DGraph* graph = new DGraph();
-    graph->Init();
     graph->RegisterNode(a, {}, "NodeA");      // 注册节点a，命名为NodeA
     graph->RegisterNode(b, {a}, "NodeB");     // 注册节点b，命名为NodeB，依赖节点a
     graph->RegisterNode(c, {a}, "NodeC");     // 注册节点c，命名为NodeC，依赖节点a
@@ -93,11 +92,12 @@ int main() {
     graph->RegisterNode(k, {h}, "PubH265");     // 注册节点i，命名为Pub，无依赖节点
    #endif
 
-
+    graph->Init();
     graph->CheckCycle();
     graph->TopologicalSort();
 
     graph->Run();
+    std::cout << "graph running done\n";
     std::this_thread::sleep_for(std::chrono::seconds(30));
     graph->Deinit();
   } catch (std::exception const& e) {

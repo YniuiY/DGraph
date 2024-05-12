@@ -26,16 +26,17 @@ int main() {
     std::shared_ptr<Node> region_node = std::dynamic_pointer_cast<Node>(region);
 
     DGraph* graph = new DGraph();
-    graph->Init();
     graph->RegisterNode(a, {}, "NodeA");      // 注册节点a，命名为NodeA
-    graph->RegisterNode(region_node, {a}, "RegionNode");     // 注册Region节点，命名为RegionNode，依赖节点a
+    graph->RegisterNode(region_node, {a}, "RegionNode", 2);     // 注册Region节点，命名为RegionNode，依赖节点a
     graph->RegisterNode(f, {region_node}, "NodeF");     // 注册节点f，命名为NodeF，依赖Region节点
    #endif
 
+    graph->Init();
     graph->CheckCycle();
     graph->TopologicalSort();
 
     graph->Run();
+    std::this_thread::sleep_for(std::chrono::seconds(20));
     graph->Deinit();
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;

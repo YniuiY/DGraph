@@ -2,11 +2,16 @@
 
 #include "ParamManager/ParamManager.h"
 #include "Utils/TimeUtil.h"
+#include "threadpool/ThreadPool.hpp"
 
 Node::Node()
     : left_dep_count_{0},
       loop_count_{1},
       node_state_{NodeState::CREATED} {
+
+}
+
+void Node::Init() {
 
 }
 
@@ -31,18 +36,19 @@ void Node::RunBefore() {
 void Node::RunAfter() {
   // 节点执行完成后，给依赖此节点的后驱节点依赖项减一
   for (auto node : right_be_dependency_node_) {
-    node->left_dep_count_--;
+    node->indegree_--;
   }
   // 运行结束后重置本节点入度
-  // left_dep_count_ = static_left_dep_count_;
-  // std::cout << node_name_ << " reset left_dep_count_: " << left_dep_count_ << std::endl;
+  indegree_ = static_left_dep_count_;
+  left_dep_count_ = static_left_dep_count_;
+  std::cout << node_name_ << " reset indegree: " << indegree_ << std::endl;
   node_state_ = NodeState::RUNNING_DONE;
 }
 
 bool Node::IsRunable() {
   bool ret{false};
   // 节点前置依赖项为0 且 不是正在执行状态 且 不是准备执行状态 
-  if (left_dep_count_ == 0 &&
+  if (indegree_ == 0 &&
       node_state_ != NodeState::RUNNING &&
       node_state_ != NodeState::RUNNING_WAITING) {
     std::cout << node_name_ << " is run able" << std::endl;
@@ -64,7 +70,7 @@ void Node::AddDependencyNodes(std::set<std::shared_ptr<Node>> const& node_set) {
     node->right_be_dependency_node_.emplace(
         this);  // 将依赖此节点的后驱节点注册进来
   }
-  std::cout << std::endl;
+  std::cout << " indegree: " << indegree_ << std::endl;
 }
 
 void Node::SetNodeName(std::string const& name) {
@@ -91,8 +97,12 @@ std::set<std::shared_ptr<Node>> Node::GetLeftNode() {
   return left_dependency_node_;
 }
 
-int& Node::GetIndegree() {
+int Node::GetIndegree() {
   return indegree_;
+}
+
+int& Node::GetLeftDepCount() {
+  return left_dep_count_;
 }
 
 void Node::SetNodeType(NodeType type) {
@@ -109,4 +119,8 @@ void Node::SetLoopCount(int const& loop_count) {
 
 int Node::GetLoopCount() {
   return loop_count_;
+}
+
+void Node::SetThreadPool(std::shared_ptr<ThreadPool> const& tp) {
+  tp_ = tp;
 }

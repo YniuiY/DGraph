@@ -15,7 +15,7 @@ std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
   std::queue<std::shared_ptr<Node>> queue;
   /// @brief 将邻接表中入度为零的节点加入队列
   for (auto node : adjs_) {
-    if (node->GetIndegree() == 0) {
+    if (node->GetLeftDepCount() == 0) {
       queue.push(node);
     }
   }
@@ -32,7 +32,7 @@ std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
     topological_order_.push_back(node);
 
     for (auto node : node->GetRightNode()) {
-      if (--node->GetIndegree() == 0) {
+      if (--node->GetLeftDepCount() == 0) {
         queue.push(node);
       }
     }
@@ -47,6 +47,7 @@ std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
     std::cout << "topological order node: " << topological_order_.size() << ", adjs node: " << adjs_.size() << std::endl;
     throw std::runtime_error("There is a cycle in the graph.");
   } else {
+
     return topological_order_;
   }
 }

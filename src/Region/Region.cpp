@@ -38,6 +38,7 @@ bool Region::RegisterNode(
 }
 
 void Region::Init() {
+  graph_manager_->SetThreadPool(tp_);
   graph_manager_->Init();
 }
 

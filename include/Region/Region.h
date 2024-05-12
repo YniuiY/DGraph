@@ -15,7 +15,7 @@ class Region : public Node {
   Region();
   ~Region();
 
-  void Init(); 
+  void Init() override; 
 
   bool RegisterNode(std::shared_ptr<Node>& node,
                     std::set<std::shared_ptr<Node>> const& dependency_nodes,
