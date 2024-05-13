@@ -11,19 +11,19 @@
 int main() {
   try {
    #if TEST_DIRECTED_GRAPH_1
-    std::shared_ptr<Node> a = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> b = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> c = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> d = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> e = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> f = std::make_shared<MyNode1>();
+    Node* a = new MyNode1();
+    Node* b = new MyNode1();
+    Node* c = new MyNode1();
+    Node* d = new MyNode1();
+    Node* e = new MyNode1();
+    Node* f = new MyNode1();
 
-    std::shared_ptr<dgraph::Region> region = std::make_shared<dgraph::Region>();
+    dgraph::Region* region = new dgraph::Region();
     region->RegisterNode(b, {}, "NodeB");      // 注册节点b，命名为NodeB
     region->RegisterNode(c, {b}, "NodeC");     // 注册节点c，命名为NodeC，依赖节点b
     region->RegisterNode(d, {b}, "NodeD");     // 注册节点d，命名为NodeD，依赖节点b
     region->RegisterNode(e, {c, d}, "NodeE");  // 注册节点e，命名为NodeE，依赖节点b和c
-    std::shared_ptr<Node> region_node = std::dynamic_pointer_cast<Node>(region); // 转换成基类Node类型的指针
+    Node* region_node = dynamic_cast<Node*>(region); // 转换成基类Node类型的指针
 
     std::shared_ptr<DGraph> graph = std::make_shared<DGraph>();
     graph->RegisterNode(a, {}, "NodeA");                        // 注册节点a，命名为NodeA

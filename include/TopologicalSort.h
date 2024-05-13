@@ -10,21 +10,21 @@
 
 class TopologicalSort {
  public:
-  TopologicalSort(std::set<std::shared_ptr<Node>> adjs);
+  TopologicalSort(std::set<Node*> adjs);
   ~TopologicalSort();
-  std::vector<std::shared_ptr<Node>> Sort();
-  std::stack<std::shared_ptr<Node>> DfsSort();
+  std::vector<Node*> Sort();
+  std::stack<Node*> DfsSort();
   void PrintOrder();
 
  private:
-  void dfs(std::shared_ptr<Node> node);
+  void dfs(Node* node);
 
-  std::set<std::shared_ptr<Node>> adjs_;
-  std::vector<std::shared_ptr<Node>> topological_order_;
-  std::stack<std::shared_ptr<Node>> reverse_post_order_;
-  std::set<std::shared_ptr<Node>> marked_;
+  std::set<Node*> adjs_;
+  std::vector<Node*> topological_order_;
+  std::stack<Node*> reverse_post_order_;
+  std::set<Node*> marked_;
 
-  std::set<std::shared_ptr<Node>> on_stack_;
+  std::set<Node*> on_stack_;
   bool has_cycle_;
 };
 

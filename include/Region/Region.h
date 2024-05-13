@@ -17,12 +17,12 @@ class Region : public Node {
 
   void Init() override; 
 
-  bool RegisterNode(std::shared_ptr<Node>& node,
-                    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+  bool RegisterNode(Node*& node,
+                    std::set<Node*> const& dependency_nodes,
                     const std::string node_name);
   
-  bool RegisterNode(std::shared_ptr<Node>& node,
-                    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+  bool RegisterNode(Node*& node,
+                    std::set<Node*> const& dependency_nodes,
                     const std::string node_name,
                     int const& loop_count);
  private:

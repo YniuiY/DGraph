@@ -62,7 +62,7 @@ bool Node::IsRunable() {
   return ret;
 }
 
-void Node::AddDependencyNodes(std::set<std::shared_ptr<Node>> const& node_set) {
+void Node::AddDependencyNodes(std::set<Node*> const& node_set) {
   std::cout << node_name_ << " dependency nodes: ";
   for (auto node : node_set) {
     std::cout << node->GetNodeName() << " ";
@@ -93,11 +93,11 @@ Node::NodeState Node::GetNodeState() {
   return node_state_;
 }
 
-std::set<std::shared_ptr<Node>> Node::GetRightNode() {
+std::set<Node*> Node::GetRightNode() {
   return right_be_dependency_node_;
 }
 
-std::set<std::shared_ptr<Node>> Node::GetLeftNode() {
+std::set<Node*> Node::GetLeftNode() {
   return left_dependency_node_;
 }
 

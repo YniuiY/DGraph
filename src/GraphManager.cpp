@@ -42,11 +42,11 @@ void GraphManager::SetThreadPool(std::shared_ptr<ThreadPool> const& thread_pool)
 
 int GraphManager::GetNodeCount() { return node_set_.size(); }
 
-void GraphManager::AddNode(std::shared_ptr<Node>& node) {
+void GraphManager::AddNode(Node*& node) {
   node_set_.emplace(node);
 }
 
-void GraphManager::RemoveNode(std::shared_ptr<Node>& node) {
+void GraphManager::RemoveNode(Node*& node) {
   node_set_.erase(node_set_.find(node));
 }
 

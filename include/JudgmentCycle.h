@@ -12,23 +12,23 @@ class JudgmentCycle {
  public:
   JudgmentCycle();
   ~JudgmentCycle();
-  void Init(std::set<std::shared_ptr<Node>> const&);
+  void Init(std::set<Node*> const&);
   bool HasCycle();
   void CycleNodes();
-  std::stack<std::shared_ptr<Node>> GetOrderNodeStack();
+  std::stack<Node*> GetOrderNodeStack();
   void GetBfsFrontOrder();
 
  private:
-  void dfs(std::shared_ptr<Node> const&);
-  void bfs(std::shared_ptr<Node> const&);
+  void dfs(Node* const&);
+  void bfs(Node* const&);
   void check_cycle();
   bool is_cycle_;
-  std::set<std::shared_ptr<Node>> marked_;
-  std::set<std::shared_ptr<Node>> on_stack_;
-  std::set<std::shared_ptr<Node>> adjs_;
+  std::set<Node*> marked_;
+  std::set<Node*> on_stack_;
+  std::set<Node*> adjs_;
   std::map<std::string, std::string> edge_to_;
   std::stack<std::string> cycle_node_;
-  std::stack<std::shared_ptr<Node>> node_order_;
+  std::stack<Node*> node_order_;
 };
 
 #endif

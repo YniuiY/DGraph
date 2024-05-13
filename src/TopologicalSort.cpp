@@ -6,7 +6,7 @@
 #include "TopologicalSort.h"
 
 // Constructor
-TopologicalSort::TopologicalSort(std::set<std::shared_ptr<Node>> adjs) {
+TopologicalSort::TopologicalSort(std::set<Node*> adjs) {
   adjs_ = adjs;
 }
 
@@ -14,9 +14,9 @@ TopologicalSort::~TopologicalSort() {
   std::cout << "~TopologicalSort()\n";
 }
 
-std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
+std::vector<Node*> TopologicalSort::Sort() {
   /// @brief 存储入度为0的节点
-  std::queue<std::shared_ptr<Node>> queue;
+  std::queue<Node*> queue;
   /// @brief 将邻接表中入度为零的节点加入队列
   for (auto node : adjs_) {
     if (node->GetLeftDepCount() == 0) {
@@ -61,7 +61,7 @@ std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
  * 结果就是拓扑排序
  * 但是实践发现，DFS的拓扑排序结果不如上面的排序直观
  */
-std::stack<std::shared_ptr<Node>> TopologicalSort::DfsSort() {
+std::stack<Node*> TopologicalSort::DfsSort() {
   for (auto node : adjs_) {
     if (marked_.find(node) == marked_.end()) {
       dfs(node);
@@ -75,7 +75,7 @@ std::stack<std::shared_ptr<Node>> TopologicalSort::DfsSort() {
   }
 }
 
-void TopologicalSort::dfs(std::shared_ptr<Node> node) {
+void TopologicalSort::dfs(Node* node) {
   marked_.insert(node);
   on_stack_.emplace(node);
 
@@ -94,7 +94,7 @@ void TopologicalSort::dfs(std::shared_ptr<Node> node) {
 }
 
 void TopologicalSort::PrintOrder() {
-  std::vector<std::shared_ptr<Node>> queue{topological_order_};
+  std::vector<Node*> queue{topological_order_};
   std::cout << "Topological order: ";
   for (auto node : topological_order_) {
     std::cout << node->GetNodeName() << " ";
@@ -102,7 +102,7 @@ void TopologicalSort::PrintOrder() {
   std::cout << std::endl;
 
   std::cout << "\n******************************\n\n";
-  std::stack<std::shared_ptr<Node>> stack{reverse_post_order_};
+  std::stack<Node*> stack{reverse_post_order_};
   std::cout << "Reverse post order: ";
   while (!stack.empty()) {
     auto node = stack.top();

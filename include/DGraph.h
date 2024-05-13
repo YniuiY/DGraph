@@ -23,12 +23,12 @@ class DGraph {
   void Init();
   void Run();
   void Deinit();
-  bool RegisterNode(std::shared_ptr<Node>&,
-                    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+  bool RegisterNode(Node*&,
+                    std::set<Node*> const& dependency_nodes,
                     std::string node_name);
 
-  bool RegisterNode(std::shared_ptr<Node>&,
-                    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+  bool RegisterNode(Node*&,
+                    std::set<Node*> const& dependency_nodes,
                     std::string node_name,
                     int const& loop_count);
 
