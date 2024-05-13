@@ -22,6 +22,11 @@ void Engine::Run() {
   for (auto node : entry_nodes) {
     thread_pool_ptr_->execute(std::bind(&Engine::node_run, this, node));
   }
+
+  /// TODO: 等待node_set中所有节点执行完毕
+  std::unique_lock<std::mutex> lck(mtx_);
+  cv_.wait(lck);
+  std::cout << "Engine Run Done\n";
 }
 
 void Engine::Deinit() {
@@ -45,6 +50,12 @@ void Engine::node_run_after(std::shared_ptr<Node> const& node) {
       std::cout << node->GetNodeName() << " right node: " << node_after->GetNodeName() << " indegree is 0\n";
       thread_pool_ptr_->execute(std::bind(&Engine::node_run, this, node_after));
     }
+  }
+  if (node->GetRightNode().size() <= 0 && node->GetNodeState() == Node::NodeState::RUNNING_DONE) {
+    // 没有后驱节点，且此节点执行完成
+    // 通知GraphManager，结束阻塞
+    std::cout << "Last node: " << node->GetNodeName() << " is running done\n";
+    cv_.notify_one();
   }
 }
 

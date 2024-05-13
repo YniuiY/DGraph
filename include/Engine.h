@@ -49,6 +49,8 @@ class Engine {
   std::vector<std::shared_ptr<Node>> entry_nodes;
   std::set<std::shared_ptr<Node>> node_set_;
   bool is_running_;
+  std::condition_variable cv_;
+  std::mutex mtx_;
 };
 
 #endif

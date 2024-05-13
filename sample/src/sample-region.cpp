@@ -36,7 +36,6 @@ int main() {
     graph->TopologicalSort();
 
     graph->Run();
-    std::this_thread::sleep_for(std::chrono::seconds(20));
     graph->Deinit();
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;

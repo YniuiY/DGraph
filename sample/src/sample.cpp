@@ -98,7 +98,6 @@ int main() {
 
     graph->Run();
     std::cout << "graph running done\n";
-    std::this_thread::sleep_for(std::chrono::seconds(30));
     graph->Deinit();
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
