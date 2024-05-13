@@ -13,7 +13,7 @@ Engine::~Engine() {
   std::cout << "~Engine()\n";
 }
 
-void Engine::Init(std::set<shared_ptr<Node>> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr) {
+void Engine::Init(std::set<Node*> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr) {
   std::cout << "Engine Init\n";
   node_set_ = node_set;
   thread_pool_ptr_ = thread_pool_ptr;
@@ -47,12 +47,12 @@ void Engine::run_before() {
   }
 }
 
-void Engine::node_run(std::shared_ptr<Node> const& node) {
+void Engine::node_run(Node* const& node) {
   node->Process();
   node_run_after(node);
 }
 
-void Engine::node_run_after(std::shared_ptr<Node> const& node) {
+void Engine::node_run_after(Node* const& node) {
   for (auto node_after : node->GetRightNode()) {
     if (node_after->GetIndegree() <= 0) {
       std::cout << node->GetNodeName() << " right node: " << node_after->GetNodeName() << " indegree is 0\n";

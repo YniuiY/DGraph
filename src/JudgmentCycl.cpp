@@ -20,7 +20,7 @@ JudgmentCycle::~JudgmentCycle() {
   std::cout << "~JudgmentCycle()\n";
 }
 
-void JudgmentCycle::Init(std::set<std::shared_ptr<Node>> const& node_set) {
+void JudgmentCycle::Init(std::set<Node*> const& node_set) {
   adjs_ = node_set;
 }
 
@@ -31,7 +31,7 @@ bool JudgmentCycle::HasCycle() {
   } else {
     std::cout << "### This graph is DAG ###\n";
     std::cout << "### Graph Order:";
-    std::stack<std::shared_ptr<Node>> order = node_order_;
+    std::stack<Node*> order = node_order_;
     while (!order.empty()) {
       std::cout <<  " " << order.top()->GetNodeName();
       order.pop();
@@ -53,7 +53,7 @@ void JudgmentCycle::check_cycle() {
   }
 }
 
-void JudgmentCycle::dfs(std::shared_ptr<Node> const& node) {
+void JudgmentCycle::dfs(Node* const& node) {
   marked_.emplace(node);
   on_stack_.emplace(node);
   std::cout << "marked node: " << node->GetNodeName() << std::endl;
@@ -99,7 +99,7 @@ void JudgmentCycle::CycleNodes() {
   std::cout << " ###\n";
 }
 
-std::stack<std::shared_ptr<Node>> JudgmentCycle::GetOrderNodeStack() {
+std::stack<Node*> JudgmentCycle::GetOrderNodeStack() {
   if (is_cycle_) {
     std::cout << "有环图无法对拓扑排序" << std::endl;
     throw std::runtime_error("cycle graph don't have order");
@@ -114,11 +114,11 @@ void JudgmentCycle::GetBfsFrontOrder() {
 /**
  * Create by Codegeex
  */
-void JudgmentCycle::bfs(std::shared_ptr<Node> const& node) {
+void JudgmentCycle::bfs(Node* const& node) {
   // 记录BFS的顺序
   std::vector<std::string> bfs_front_order;
   // 队列，用于BFS
-  std::queue<std::shared_ptr<Node>> queue;
+  std::queue<Node*> queue;
   // 将根节点放入队列
   queue.push(node);
   // 当队列不为空时，循环

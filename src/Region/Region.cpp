@@ -12,8 +12,8 @@ Region::~Region() {
   std::cout << "~Region()" << std::endl;
 }
 
-bool Region::RegisterNode (std::shared_ptr<Node>& node,
-                           std::set<std::shared_ptr<Node>> const& dependency_nodes,
+bool Region::RegisterNode (Node*& node,
+                           std::set<Node*> const& dependency_nodes,
                            const std::string node_name) {
   std::cout << "Region register: " << node_name << std::endl;
 
@@ -24,8 +24,8 @@ bool Region::RegisterNode (std::shared_ptr<Node>& node,
 }
 
 bool Region::RegisterNode(
-    std::shared_ptr<Node>& node,
-    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+    Node*& node,
+    std::set<Node*> const& dependency_nodes,
     const std::string node_name,
     int const& loop_count) {
   std::cout << "Region register: " << node_name << std::endl;

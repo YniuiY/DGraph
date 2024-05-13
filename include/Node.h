@@ -42,7 +42,7 @@ class Node {
 
   bool IsRunable();
 
-  void AddDependencyNodes(std::set<std::shared_ptr<Node>> const&);
+  void AddDependencyNodes(std::set<Node*> const&);
 
   void SetNodeName(std::string const& name);
 
@@ -56,9 +56,9 @@ class Node {
 
   NodeState GetNodeState();
 
-  std::set<std::shared_ptr<Node>> GetRightNode();
+  std::set<Node*> GetRightNode();
 
-  std::set<std::shared_ptr<Node>> GetLeftNode();
+  std::set<Node*> GetLeftNode();
 
   int GetIndegree();
 
@@ -76,11 +76,11 @@ class Node {
   /**
    * @brief 此节点的依赖的节点集合（邻接表），它的前置节点
    */
-  std::set<std::shared_ptr<Node>> left_dependency_node_;
+  std::set<Node*> left_dependency_node_;
   /**
    * 依赖此节点的节点集合（邻接表），它的后驱节点
    */
-  std::set<std::shared_ptr<Node>> right_be_dependency_node_;
+  std::set<Node*> right_be_dependency_node_;
   /**
    * @brief 前置依赖项数（入度）， 拓扑排序用
    */

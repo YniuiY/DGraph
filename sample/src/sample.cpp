@@ -10,13 +10,13 @@
 int main() {
   try {
    #if TEST_DIRECTED_GRAPH_1
-    std::shared_ptr<Node> a = std::make_shared<MyNode5>();
-    std::shared_ptr<Node> b = std::make_shared<MyNode5>();
-    std::shared_ptr<Node> c = std::make_shared<MyNode3>();
-    std::shared_ptr<Node> d = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> e = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> f = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> g = std::make_shared<MyNode1>();
+    Node* a = new MyNode5();
+    Node* b = new MyNode5();
+    Node* c = new MyNode3();
+    Node* d = new MyNode1();
+    Node* e = new MyNode1();
+    Node* f = new MyNode1();
+    Node* g = new MyNode1();
 
     DGraph* graph = new DGraph();
     graph->RegisterNode(a, {}, "NodeA");      // 注册节点a，命名为NodeA

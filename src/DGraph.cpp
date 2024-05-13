@@ -57,8 +57,8 @@ void DGraph::Deinit() {
 }
 
 bool DGraph::RegisterNode(
-    std::shared_ptr<Node>& node,
-    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+    Node*& node,
+    std::set<Node*> const& dependency_nodes,
     const std::string node_name) {
   std::cout << "Graph register: " << node_name << std::endl;
 
@@ -69,8 +69,8 @@ bool DGraph::RegisterNode(
 }
 
 bool DGraph::RegisterNode(
-    std::shared_ptr<Node>& node,
-    std::set<std::shared_ptr<Node>> const& dependency_nodes,
+    Node*& node,
+    std::set<Node*> const& dependency_nodes,
     const std::string node_name,
     int const& loop_count) {
   std::cout << "Graph register: " << node_name << std::endl;

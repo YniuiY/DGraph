@@ -24,7 +24,7 @@ class Engine {
  public:
   Engine();
   ~Engine();
-  void Init(std::set<std::shared_ptr<Node>> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr);
+  void Init(std::set<Node*> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr);
 
   /**
    * 从入口节点开始运行，在节点运行完成后，
@@ -38,17 +38,17 @@ class Engine {
  private:
   void find_entry_node();
 
-  void node_run(std::shared_ptr<Node> const& node);
+  void node_run(Node* const& node);
 
   /// @brief 节点运行前，设置状态
   void run_before();
 
   /// @brief 节点运行后，检查后驱节点，如果后驱节点前置依赖归零，则加入线程池执行
-  void node_run_after(std::shared_ptr<Node> const& node);
+  void node_run_after(Node* const& node);
 
   std::shared_ptr<ThreadPool> thread_pool_ptr_;   // 线程池
-  std::vector<std::shared_ptr<Node>> entry_nodes; // 入口节点
-  std::set<std::shared_ptr<Node>> node_set_;      // 全部节点集合
+  std::vector<Node*> entry_nodes; // 入口节点
+  std::set<Node*> node_set_;      // 全部节点集合
   bool is_running_;                               // 正在运行状态
   std::condition_variable cv_;                    // 阻塞Run函数的条件变量 
   std::mutex mtx_;                                // 
