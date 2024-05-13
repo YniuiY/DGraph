@@ -91,6 +91,16 @@ int main() {
     graph->Init();
     graph->Run();
     graph->Deinit();
+
+    delete a;
+    delete b;
+    delete c;
+    delete d;
+    delete e;
+    delete f;
+    delete g;
+
+    return 0;
     std::cout << "Run Over\n";
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
