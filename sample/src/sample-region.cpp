@@ -34,6 +34,16 @@ int main() {
     graph->Init();
     graph->Run();
     graph->Deinit();
+
+    delete a;
+    delete b;
+    delete c;
+    delete d;
+    delete e;
+    delete f;
+    delete region;
+
+    return 0;
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
     return -1;
