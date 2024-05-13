@@ -11,6 +11,7 @@ class Node;
 class JudgmentCycle {
  public:
   JudgmentCycle();
+  ~JudgmentCycle();
   void Init(std::set<std::shared_ptr<Node>> const&);
   bool HasCycle();
   void CycleNodes();

@@ -11,6 +11,10 @@ Node::Node()
 
 }
 
+Node::~Node() {
+  std::cout << "~Node(): " << node_name_ << std::endl;
+}
+
 void Node::Init() {
 
 }
@@ -41,7 +45,7 @@ void Node::RunAfter() {
   // 运行结束后重置本节点入度
   indegree_ = static_left_dep_count_;
   left_dep_count_ = static_left_dep_count_;
-  std::cout << node_name_ << " reset indegree: " << indegree_ << std::endl;
+  // std::cout << node_name_ << " reset indegree: " << indegree_ << std::endl;
   node_state_ = NodeState::RUNNING_DONE;
 }
 

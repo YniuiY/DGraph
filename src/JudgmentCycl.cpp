@@ -16,6 +16,10 @@ JudgmentCycle::JudgmentCycle(): is_cycle_{false}, marked_{nullptr}, on_stack_{nu
 
 }
 
+JudgmentCycle::~JudgmentCycle() {
+  std::cout << "~JudgmentCycle()\n";
+}
+
 void JudgmentCycle::Init(std::set<std::shared_ptr<Node>> const& node_set) {
   adjs_ = node_set;
 }

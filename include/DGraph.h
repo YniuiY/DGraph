@@ -18,9 +18,9 @@ class ThreadPool;
 class DGraph {
  public:
   DGraph();
-  ~DGraph() = default;
+  ~DGraph();
+
   void Init();
-  void CheckCycle();
   void Run();
   void Deinit();
   bool RegisterNode(std::shared_ptr<Node>&,
@@ -31,9 +31,11 @@ class DGraph {
                     std::set<std::shared_ptr<Node>> const& dependency_nodes,
                     std::string node_name,
                     int const& loop_count);
-  void TopologicalSort();
 
  private:
+  void check_cycle();
+  void topological_sort();
+
   std::shared_ptr<GraphManager> graph_manager_;
   std::shared_ptr<ThreadPool> thread_pool_;
 };

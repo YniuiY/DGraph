@@ -17,7 +17,6 @@ int main() {
     std::shared_ptr<Node> e = std::make_shared<MyNode1>();
     std::shared_ptr<Node> f = std::make_shared<MyNode1>();
     std::shared_ptr<Node> g = std::make_shared<MyNode1>();
-    std::shared_ptr<Node> h = std::make_shared<LoopNode>();
 
     DGraph* graph = new DGraph();
     graph->RegisterNode(a, {}, "NodeA");      // 注册节点a，命名为NodeA
@@ -26,8 +25,7 @@ int main() {
     graph->RegisterNode(d, {a}, "NodeD");     // 注册节点d，命名为NodeD，依赖节点a
     graph->RegisterNode(e, {b, c}, "NodeE");  // 注册节点e，命名为NodeE，依赖节点b和c
     graph->RegisterNode(f, {d, e}, "NodeF");  // 注册节点f，命名为NodeF，依赖节点d和e
-    // graph->RegisterNode(g, {}, "NodeG");      // 注册节点g，命名为NodeG
-    // graph->RegisterNode(h, {}, "LoopNode1"); // 注册一个loop节点h,
+    graph->RegisterNode(g, {}, "NodeG");      // 注册节点g，命名为NodeG
     // graph->RegisterNode(c, {f}, "NodeC");     // 注册节点c，命名为NodeC，依赖节点f。注意：此项会使graph成环, 图结构见image目录Directed_ring_graph.jpg
    #endif
 
@@ -47,7 +45,6 @@ int main() {
 
 
     DGraph* graph = new DGraph();
-    graph->Init();
     graph->RegisterNode(a, {}, "NodeA");      // 注册节点a，命名为NodeA
     graph->RegisterNode(b, {}, "NodeB");      // 注册节点b，命名为NodeB，依赖节点a
     graph->RegisterNode(c, {a, b}, "NodeC");  // 注册节点c，命名为NodeC，依赖节点a,b
@@ -78,7 +75,6 @@ int main() {
 
 
     DGraph* graph = new DGraph();
-    graph->Init();
     graph->RegisterNode(a, {}, "GetImage");     // 注册节点a，命名为GetImage
     graph->RegisterNode(b, {a}, "Clip");        // 注册节点b，命名为Clip，依赖节点a
     graph->RegisterNode(c, {b}, "Cyl");         // 注册节点c，命名为Cyl，依赖节点b
@@ -93,12 +89,9 @@ int main() {
    #endif
 
     graph->Init();
-    graph->CheckCycle();
-    graph->TopologicalSort();
-
     graph->Run();
-    std::cout << "graph running done\n";
     graph->Deinit();
+    std::cout << "Run Over\n";
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
     return -1;

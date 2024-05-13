@@ -5,17 +5,24 @@
 #include "Node.h"
 #include "GraphManager.h"
 
-Engine::Engine() : is_running_(false), thread_pool_ptr_(nullptr){}
+Engine::Engine() : is_running_(false), thread_pool_ptr_(nullptr), finished_node_num_{0} {
+
+}
+
+Engine::~Engine() {
+  std::cout << "~Engine()\n";
+}
 
 void Engine::Init(std::set<shared_ptr<Node>> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr) {
   std::cout << "Engine Init\n";
   node_set_ = node_set;
   thread_pool_ptr_ = thread_pool_ptr;
   find_entry_node();
+  std::cout << "Engine Init Done\n";
 }
 
 void Engine::Run() {
-  std::cout << "Engine Run\n";
+  std::cout << "Engine Running\n";
   is_running_ = true;
 
   // 可以一直按照DAG运行
@@ -26,7 +33,8 @@ void Engine::Run() {
   /// TODO: 等待node_set中所有节点执行完毕
   std::unique_lock<std::mutex> lck(mtx_);
   cv_.wait(lck);
-  std::cout << "Engine Run Done\n";
+  finished_node_num_ = 0;
+  std::cout << "Engine Running Done\n";
 }
 
 void Engine::Deinit() {
@@ -51,12 +59,12 @@ void Engine::node_run_after(std::shared_ptr<Node> const& node) {
       thread_pool_ptr_->execute(std::bind(&Engine::node_run, this, node_after));
     }
   }
-  if (node->GetRightNode().size() <= 0 && node->GetNodeState() == Node::NodeState::RUNNING_DONE) {
-    // 没有后驱节点，且此节点执行完成
+  if (++finished_node_num_ >= node_set_.size() && node->GetRightNode().size() <= 0) {
+    // 没有后驱节点 且 node_set中全部节点都执行完毕
     // 通知GraphManager，结束阻塞
-    std::cout << "Last node: " << node->GetNodeName() << " is running done\n";
     cv_.notify_one();
   }
+  std::cout << "finished_node_num_: " << finished_node_num_ << " total node size: " << node_set_.size() << "\n";
 }
 
 void Engine::find_entry_node() {

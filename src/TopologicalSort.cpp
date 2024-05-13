@@ -10,6 +10,10 @@ TopologicalSort::TopologicalSort(std::set<std::shared_ptr<Node>> adjs) {
   adjs_ = adjs;
 }
 
+TopologicalSort::~TopologicalSort() {
+  std::cout << "~TopologicalSort()\n";
+}
+
 std::vector<std::shared_ptr<Node>> TopologicalSort::Sort() {
   /// @brief 存储入度为0的节点
   std::queue<std::shared_ptr<Node>> queue;

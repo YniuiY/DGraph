@@ -9,7 +9,7 @@ Region::Region():Node(), graph_manager_{std::make_shared<GraphManager>()} {
 }
 
 Region::~Region() {
-
+  std::cout << "~Region()" << std::endl;
 }
 
 bool Region::RegisterNode (std::shared_ptr<Node>& node,

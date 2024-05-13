@@ -25,7 +25,10 @@ ThreadPool::ThreadPool(int maxCount, int coreCount, int tQueueLength, Policy p,
   init();
 }
 
-ThreadPool::~ThreadPool() { joinAllThreads(); }
+ThreadPool::~ThreadPool() {
+  joinAllThreads();
+  std::cout << "~ThreadPool()\n";
+}
 
 void ThreadPool::getTid() {
   cout << "thread id:" << this_thread::get_id() << endl;

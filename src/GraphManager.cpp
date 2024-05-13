@@ -12,7 +12,9 @@ GraphManager::GraphManager(): engine_{std::make_shared<Engine>()},
   std::cout << "GraphManager()\n";
 }
 
-GraphManager::~GraphManager() {}
+GraphManager::~GraphManager() {
+  std::cout << "~GraphManager()\n";
+}
 
 void GraphManager::Init() {
   std::cout << "GraphManager Init\n";
@@ -25,7 +27,9 @@ void GraphManager::Init() {
 }
 
 void GraphManager::Run() {
+  std::cout << "GraphManager Running\n";
   engine_->Run();
+  std::cout << "GraphManager Running Done\n";
 }
 
 void GraphManager::Deinit() {
@@ -40,7 +44,6 @@ int GraphManager::GetNodeCount() { return node_set_.size(); }
 
 void GraphManager::AddNode(std::shared_ptr<Node>& node) {
   node_set_.emplace(node);
-  
 }
 
 void GraphManager::RemoveNode(std::shared_ptr<Node>& node) {

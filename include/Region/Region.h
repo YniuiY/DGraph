@@ -31,7 +31,6 @@ class Region : public Node {
   void run_after();
 
   std::shared_ptr<GraphManager> graph_manager_;
-  std::set<std::shared_ptr<Node>> node_set_;
 };
 
 } // namespace dgraph

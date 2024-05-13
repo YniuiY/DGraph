@@ -11,6 +11,7 @@
 class TopologicalSort {
  public:
   TopologicalSort(std::set<std::shared_ptr<Node>> adjs);
+  ~TopologicalSort();
   std::vector<std::shared_ptr<Node>> Sort();
   std::stack<std::shared_ptr<Node>> DfsSort();
   void PrintOrder();

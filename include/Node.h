@@ -30,6 +30,7 @@ class Node {
   };
 
   Node();
+  virtual ~Node();
 
   virtual void Init();
 

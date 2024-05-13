@@ -9,6 +9,10 @@ DGraph::DGraph(): graph_manager_{std::make_shared<GraphManager>()} {
 
 }
 
+DGraph::~DGraph() {
+  std::cout << "~DGraph()\n";
+}
+
 void DGraph::Init() {
   std::cout << "DGraph Init\n";
 
@@ -34,22 +38,17 @@ void DGraph::Init() {
 
   graph_manager_->SetThreadPool(thread_pool_);
   graph_manager_->Init();
-}
-
-void DGraph::CheckCycle() {
-  if (!graph_manager_->HasCycle()) {
-    std::cout << "### Graph has no cycle ###\n";
-  } else {
-    std::cout << "### Graph has cycle ###\n";
-    exit(0);
-  }
+  check_cycle();
+  topological_sort();
+  std::cout << "DGraph Init Done\n";
 }
 
 void DGraph::Run() {
-  std::cout << "DGraph Run\n";
+  std::cout << "DGraph Running\n";
   std::cout << "total node count: " << graph_manager_->GetNodeCount()
             << std::endl;
   graph_manager_->Run();
+  std::cout << "DGraph Running Done\n";
 }
 
 void DGraph::Deinit() {
@@ -83,6 +82,15 @@ bool DGraph::RegisterNode(
   return true;
 }
 
-void DGraph::TopologicalSort() {
+void DGraph::check_cycle() {
+  if (!graph_manager_->HasCycle()) {
+    std::cout << "### Graph has no cycle ###\n";
+  } else {
+    std::cout << "### Graph has cycle ###\n";
+    throw runtime_error("Graph has cycle");
+  }
+}
+
+void DGraph::topological_sort() {
   graph_manager_->TopoSort();
 }
