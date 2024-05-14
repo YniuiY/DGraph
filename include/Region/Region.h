@@ -28,6 +28,13 @@ class Region : public Node {
   template <class NodeType>
   bool RegisterNode(Node*& node,
                     std::set<Node*> const& dependency_nodes,
+                    const std::string node_name) {
+    return graph_manager_->RegisterNode<NodeType>(node, dependency_nodes, node_name, 1);
+  }
+
+  template <class NodeType>
+  bool RegisterNode(Node*& node,
+                    std::set<Node*> const& dependency_nodes,
                     const std::string node_name,
                     int const& loop_count) {
     return graph_manager_->RegisterNode<NodeType>(node, dependency_nodes, node_name, loop_count);

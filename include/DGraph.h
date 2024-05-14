@@ -35,6 +35,14 @@ class DGraph {
   template<class NodeType>
   bool RegisterNode(Node*& node,
                     std::set<Node*> const& dependency_nodes,
+                    std::string node_name)  {
+    std::cout << "Graph register: " << node_name << std::endl;
+    return graph_manager_->RegisterNode<NodeType>(node, dependency_nodes, node_name, 1);
+  }
+
+  template<class NodeType>
+  bool RegisterNode(Node*& node,
+                    std::set<Node*> const& dependency_nodes,
                     std::string node_name,
                     int const& loop_count)  {
     std::cout << "Graph register: " << node_name << std::endl;
