@@ -14,6 +14,12 @@ GraphManager::GraphManager(): engine_{std::make_shared<Engine>()},
 
 GraphManager::~GraphManager() {
   std::cout << "~GraphManager()\n";
+  for (auto node: node_set_) {
+    if (node != nullptr) {
+      delete node;
+      node = nullptr;
+    }
+  }
 }
 
 void GraphManager::Init() {

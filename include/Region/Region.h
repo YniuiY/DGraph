@@ -4,9 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "GraphManager.h"
 #include "Node.h"
-
-class GraphManager;
 
 namespace dgraph {
 
@@ -25,6 +24,14 @@ class Region : public Node {
                     std::set<Node*> const& dependency_nodes,
                     const std::string node_name,
                     int const& loop_count);
+
+  template <class NodeType>
+  bool RegisterNode(Node*& node,
+                    std::set<Node*> const& dependency_nodes,
+                    const std::string node_name,
+                    int const& loop_count) {
+    return graph_manager_->RegisterNode<NodeType>(node, dependency_nodes, node_name, loop_count);
+  }
  private:
   void run() override;
   void run_before();

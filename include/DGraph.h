@@ -11,9 +11,9 @@
 #include <vector>
 #include <memory>
 
+#include "GraphManager.h"
+
 class Engine;
-class Node;
-class GraphManager;
 class ThreadPool;
 class DGraph {
  public:
@@ -31,6 +31,15 @@ class DGraph {
                     std::set<Node*> const& dependency_nodes,
                     std::string node_name,
                     int const& loop_count);
+
+  template<class NodeType>
+  bool RegisterNode(Node*& node,
+                    std::set<Node*> const& dependency_nodes,
+                    std::string node_name,
+                    int const& loop_count)  {
+    std::cout << "Graph register: " << node_name << std::endl;
+    return graph_manager_->RegisterNode<NodeType>(node, dependency_nodes, node_name, loop_count);
+  }
 
  private:
   void check_cycle();

@@ -11,12 +11,12 @@
 #include <vector>
 #include <stack>
 
+#include "Node.h"
+
 class JudgmentCycle;
 class TopologicalSort;
 class Engine;
 class ThreadPool;
-class Node;
-
 class GraphManager {
  public:
   GraphManager();
@@ -27,6 +27,28 @@ class GraphManager {
   void Run();
 
   void Deinit();
+
+  template<class NodeType>
+  bool RegisterNode(Node*& node,
+                    std::set<Node*> const& dependency_nodes,
+                    std::string node_name,
+                    int const& loop_count) {
+    std::cout << "RegisterNode in GraphManager\n";
+    if(node == nullptr) {
+      node = new NodeType();
+    }
+
+    if (node != nullptr) {
+      node->SetNodeName(node_name);
+      node->SetLoopCount(loop_count);
+      node->AddDependencyNodes(dependency_nodes);
+      AddNode(node);
+    } else {
+      std::cout << "node is nullptr\n";
+      return false;
+    }
+    return true;
+  }
 
   void SetThreadPool(std::shared_ptr<ThreadPool> const& thread_pool); 
 

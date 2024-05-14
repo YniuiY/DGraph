@@ -104,4 +104,6 @@ class Node {
   std::shared_ptr<ThreadPool> tp_;
 };
 
+using NodePtr = Node*;
+
 #endif
