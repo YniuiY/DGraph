@@ -1,6 +1,8 @@
 #include "Region/Region.h"
 
 #include "GraphManager.h"
+#include "ParamManager/ParamManager.h"
+#include "Utils/TimeUtil.h"
 
 namespace dgraph {
 
@@ -43,7 +45,11 @@ void Region::Init() {
 }
 
 void Region::run_before() {
-  
+  // TODO: 从前置节点获取他们的输出参数
+  for (auto left_node: GetLeftNode()) {
+    Param const* param = ParamManager::GetInstance().GetParam<Param>(left_node->GetNodeName());
+    std::cout << GetNodeName() << " get param: " << param->GetTopic() << " frame id: " << param->GetFrameId() << std::endl;
+  }
 }
 
 void Region::run() {
@@ -53,7 +59,13 @@ void Region::run() {
 }
 
 void Region::run_after() {
-  
+  // TODO: 输出参数到后驱节点
+  std::shared_ptr<dgraph::Param> out_param{std::make_shared<dgraph::Param>()};
+  out_param->Clear();
+  out_param->SetTopic(GetNodeName());
+  out_param->SetTimestamp(TimeUtil::TimeNow());
+  dgraph::ParamManager::GetInstance().SetParam<dgraph::Param>(GetNodeName(), out_param);
+  std::cout << Node::GetNodeName() << " output topic: " << GetNodeName() << " param\n";
 }
 
 } // namespace dgraph

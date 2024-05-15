@@ -3,9 +3,9 @@
 #include "DGraph.h"
 #include "MyNode.h"
 
-#define TEST_DIRECTED_GRAPH_1 0
+#define TEST_DIRECTED_GRAPH_1 1
 #define TEST_DIRECTED_GRAPH_2 0
-#define TEST_DIRECTED_GRAPH_3 1
+#define TEST_DIRECTED_GRAPH_3 0
 
 int main() {
   try {
