@@ -58,7 +58,7 @@ void Engine::Run() {
             thread_pool_ptr_->Commit(std::bind(&Engine::node_run, this, node));
           }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(3));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
       }
     }
   }
