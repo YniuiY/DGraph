@@ -9,7 +9,7 @@ namespace dgraph {
 
 class TimeUtil {
  public:
-  static uint64_t TimeNow();
+  static int64_t TimeNow();
 };
 
 }// dgraph

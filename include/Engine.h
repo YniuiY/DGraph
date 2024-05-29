@@ -17,12 +17,13 @@
 #include <set>
 #include <vector>
 
-#include "threadpool/ThreadPool.hpp"
+#include "thread_pool.hpp"
 
 class Node;
 class Engine {
  public:
   Engine();
+  explicit Engine(bool is_region);
   ~Engine();
   void Init(std::set<Node*> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr);
 
@@ -47,12 +48,14 @@ class Engine {
   void node_run_after(Node* const& node);
 
   std::shared_ptr<ThreadPool> thread_pool_ptr_;   // 线程池
-  std::vector<Node*> entry_nodes; // 入口节点
-  std::set<Node*> node_set_;      // 全部节点集合
+  std::vector<Node*> entry_nodes_;                // 入口节点
+  std::vector<Node*> alone_nodes_;                // 独立于DAG的节点
+  std::set<Node*> node_set_;                      // 全部节点集合
   bool is_running_;                               // 正在运行状态
   std::condition_variable cv_;                    // 阻塞Run函数的条件变量 
   std::mutex mtx_;                                // 
   int finished_node_num_;                         // 运行结束的节点数量
+  bool is_region_;                                  // 是否为Region引擎
 };
 
 #endif

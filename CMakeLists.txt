@@ -10,28 +10,30 @@ option(INSTALL "install" ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
-link_directories(${PROJECT_SOURCE_DIR}/lib)
+link_directories(${PROJECT_SOURCE_DIR}/3rd-party/ThreadPool/x86_lib)
 
 include_directories(./include)
+include_directories(${PROJECT_SOURCE_DIR}/3rd-party/ThreadPool/include)
 
 aux_source_directory(./src SRCS)
-aux_source_directory(./src/threadpool TP_SRCS)
 aux_source_directory(./src/ParamManager PARAM_SRCS)
 aux_source_directory(./src/Region REGION_SRCS)
 aux_source_directory(./src/Utils UTIL_SRCS)
 
-add_library(dgraph SHARED ${SRCS} ${TP_SRCS} ${PARAM_SRCS} ${REGION_SRCS} ${UTIL_SRCS})
+add_library(dgraph SHARED ${SRCS} ${PARAM_SRCS} ${REGION_SRCS} ${UTIL_SRCS})
 
-target_link_libraries(dgraph pthread)
+target_link_libraries(dgraph thread_pool pthread)
 
 if(INSTALL)
   set(OUTPUT "${PROJECT_SOURCE_DIR}/output/DGraph")
   message("install to ${OUTPUT}")
   install(TARGETS dgraph LIBRARY DESTINATION ${OUTPUT}/lib)
+  install(FILES ${PROJECT_SOURCE_DIR}/3rd-party/ThreadPool/x86_lib/libthread_pool.so DESTINATION ${OUTPUT}/lib)
   install(FILES ${PROJECT_SOURCE_DIR}/include/DGraph.h DESTINATION ${OUTPUT}/include)
   install(FILES ${PROJECT_SOURCE_DIR}/include/Node.h DESTINATION ${OUTPUT}/include)
   install(FILES ${PROJECT_SOURCE_DIR}/include/GraphManager.h DESTINATION ${OUTPUT}/include)
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ParamManager DESTINATION ${OUTPUT}/include)
+  install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/ThreadPool DESTINATION ${OUTPUT}/include)
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/Region DESTINATION ${OUTPUT}/include)
   install(DIRECTORY ${PROJECT_SOURCE_DIR}/include/Utils DESTINATION ${OUTPUT}/include)
 endif()

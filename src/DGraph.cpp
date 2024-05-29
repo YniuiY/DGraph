@@ -4,6 +4,7 @@
 #include "Engine.h"
 #include "GraphManager.h"
 #include "Node.h"
+#include "thread_pool.hpp"
 
 DGraph::DGraph(): graph_manager_{std::make_shared<GraphManager>()} {
 
@@ -17,12 +18,12 @@ void DGraph::Init() {
   std::cout << "DGraph Init\n";
 
   // init thread pool
-  int maxCount = 18;
+  int maxCount = 16;
   int coreCount = 8;
-  int taskQueueLength = 8;
+  int taskQueueLength = 1000;
   Policy policy = Discard;
-  int liveTime = 2;
-  Unit unit = Second;
+  int liveTime = 20;
+  ThreadPool::Unit unit = ThreadPool::Unit::Second;
 
   std::cout << "\n**************************************************"
             << "\nInit thread pool:\nmax thread count: " << maxCount
@@ -87,7 +88,7 @@ void DGraph::check_cycle() {
     std::cout << "### Graph has no cycle ###\n";
   } else {
     std::cout << "### Graph has cycle ###\n";
-    throw runtime_error("Graph has cycle");
+    throw std::runtime_error("Graph has cycle");
   }
 }
 

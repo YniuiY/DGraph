@@ -23,7 +23,7 @@ int main() {
     graph->RegisterNode<MyNode5>(b, {a}, "NodeB");     // 注册节点b，命名为NodeB，依赖节点a
     graph->RegisterNode<MyNode3>(c, {a}, "NodeC");     // 注册节点c，命名为NodeC，依赖节点a
     graph->RegisterNode<MyNode1>(d, {a}, "NodeD");     // 注册节点d，命名为NodeD，依赖节点a
-    graph->RegisterNode<MyNode1>(e, {b, c}, "NodeE");     // 注册节点e，命名为NodeE，依赖节点b和c
+    graph->RegisterNode<MyNode1>(e, {b, c}, "NodeE", 3);     // 注册节点e，命名为NodeE，依赖节点b和c
     graph->RegisterNode<MyNode1>(f, {d, e}, "NodeF");     // 注册节点f，命名为NodeF，依赖节点d和e
     graph->RegisterNode<MyNode1>(g, {}, "NodeG");     // 注册节点g，命名为NodeG
     // graph->RegisterNode<MyNode1>(c, {f}, "NodeC", 1);     // 注册节点c，命名为NodeC，依赖节点f。注意：此项会使graph成环, 图结构见image目录Directed_ring_graph.jpg

@@ -19,7 +19,13 @@ class Engine;
 class ThreadPool;
 class GraphManager {
  public:
+  enum class EngineType {
+    GRAPH_ENGINE,
+    REGION_ENGINE
+  };
+
   GraphManager();
+  explicit GraphManager(EngineType const& engine_type);
   ~GraphManager();
 
   void Init();

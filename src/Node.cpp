@@ -2,7 +2,7 @@
 
 #include "ParamManager/ParamManager.h"
 #include "Utils/TimeUtil.h"
-#include "threadpool/ThreadPool.hpp"
+#include "thread_pool.hpp"
 
 Node::Node()
     : left_dep_count_{0},
@@ -16,7 +16,7 @@ Node::~Node() {
 }
 
 void Node::Init() {
-
+  node_state_ = NodeState::INITED;
 }
 
 void Node::Process() {
@@ -35,26 +35,29 @@ void Node::run() {
 void Node::RunBefore() {
   // 节点运行前设置节点状态为running
   node_state_ = NodeState::RUNNING;
+  std::cout << "Node: " << node_name_ << " run before" << std::endl;
 }
 
 void Node::RunAfter() {
+  node_state_ = NodeState::RUNNING_DONE;
   // 节点执行完成后，给依赖此节点的后驱节点依赖项减一
+  std::cout << "Node: " << node_name_ << " run after" << std::endl;
+
   for (auto node : right_be_dependency_node_) {
-    node->indegree_--;
+    node->IndegreeDecrease(); // TODO:给indegree的加减加锁
   }
   // 运行结束后重置本节点入度
-  indegree_ = static_left_dep_count_;
-  left_dep_count_ = static_left_dep_count_;
-  // std::cout << node_name_ << " reset indegree: " << indegree_ << std::endl;
-  node_state_ = NodeState::RUNNING_DONE;
+  indegree_reset();
+
+  // 运行结束后重置本节点状态为初始状态
+  // 节点状态为初始状态，表示此节点可以被调度
+  node_state_ = NodeState::INITED;
 }
 
 bool Node::IsRunable() {
   bool ret{false};
-  // 节点前置依赖项为0 且 不是正在执行状态 且 不是准备执行状态 
-  if (indegree_ == 0 &&
-      node_state_ != NodeState::RUNNING &&
-      node_state_ != NodeState::RUNNING_WAITING) {
+  // 节点前置依赖项为0 且 节点状态为初始状态，表示此节点可以被调度
+  if (indegree_ == 0 && node_state_ == NodeState::INITED) {
     std::cout << node_name_ << " is run able" << std::endl;
     ret = true;
     node_state_ = NodeState::RUNNING_WAITING;
@@ -102,6 +105,7 @@ std::set<Node*> Node::GetLeftNode() {
 }
 
 int Node::GetIndegree() {
+  std::lock_guard<std::mutex> lock(indegree_mutex_);
   return indegree_;
 }
 
@@ -127,4 +131,14 @@ int Node::GetLoopCount() {
 
 void Node::SetThreadPool(std::shared_ptr<ThreadPool> const& tp) {
   tp_ = tp;
+}
+
+void Node::IndegreeDecrease() {
+  std::lock_guard<std::mutex> lock(indegree_mutex_);
+  --indegree_;
+}
+
+void Node::indegree_reset() {
+  std::lock_guard<std::mutex> lock(indegree_mutex_);
+  indegree_ = static_left_dep_count_;
 }

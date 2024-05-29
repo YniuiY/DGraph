@@ -11,6 +11,7 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include <mutex>
 
 class ThreadPool;
 class Node {
@@ -62,6 +63,8 @@ class Node {
 
   int GetIndegree();
 
+  void IndegreeDecrease(); // 入度减一
+
   int& GetLeftDepCount();
 
   void SetLoopCount(int const& loop_count);
@@ -73,12 +76,14 @@ class Node {
  private:
   virtual void run();
 
+  void indegree_reset(); // 恢复原始入度
+
   /**
    * @brief 此节点的依赖的节点集合（邻接表），它的前置节点
    */
   std::set<Node*> left_dependency_node_;
   /**
-   * 依赖此节点的节点集合（邻接表），它的后驱节点
+   * @brief 依赖此节点的节点集合（邻接表），它的后驱节点
    */
   std::set<Node*> right_be_dependency_node_;
   /**
@@ -86,18 +91,25 @@ class Node {
    */
   int left_dep_count_;
 
-  // 记录最初的入度，在运行结束后恢复入度，准备下一轮运行
+  /// @brief 记录最初的入度，在运行结束后恢复入度，准备下一轮运行
   std::uint32_t static_left_dep_count_;
 
   /// @brief 入度（前置依赖项数）
   int indegree_;
 
+  /// @brief 多线程操作入度需要上锁
+  std::mutex indegree_mutex_;
+
+  /// @brief 节点名称
   std::string node_name_;
 
+  /// @brief 节点状态
   std::atomic<NodeState> node_state_;
 
+  /// @brief 节点类型
   NodeType node_type_;
 
+  /// @brief 循环次数
   int loop_count_;
 
  protected:

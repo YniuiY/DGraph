@@ -4,7 +4,6 @@
  * 使用工厂配合单件模式实例化拒绝策略。
  */
 #include <functional>
-using namespace std;
 
 enum Policy { Abort, Discard, CallerRun };
 
@@ -14,7 +13,7 @@ class BaseRejectPolicy {
   BaseRejectPolicy();
   virtual ~BaseRejectPolicy();
 
-  virtual void reject(function<void()>&&);
+  virtual void reject(std::function<void()>&&);
 };
 
 class AbortPolicy : public BaseRejectPolicy {
@@ -22,21 +21,21 @@ class AbortPolicy : public BaseRejectPolicy {
   AbortPolicy();
   ~AbortPolicy() override;
 
-  void reject(function<void()>&&) override;
+  void reject(std::function<void()>&&) override;
 };
 
 class CallerRunPolicy : public BaseRejectPolicy {
  public:
   CallerRunPolicy();
   ~CallerRunPolicy() override;
-  void reject(function<void()>&&) override;
+  void reject(std::function<void()>&&) override;
 };
 
 class DiscardPolicy : public BaseRejectPolicy {
  public:
   DiscardPolicy();
   ~DiscardPolicy() override;
-  void reject(function<void()>&&) override;
+  void reject(std::function<void()>&&) override;
 };
 
 class RejectPolicyFactory {
@@ -50,6 +49,6 @@ class RejectPolicyFactory {
 
  public:
   ~RejectPolicyFactory();
-  static RejectPolicyFactory* getInstance();
+  static RejectPolicyFactory& getInstance();
   BaseRejectPolicy* getRejectPolicy(Policy);
 };

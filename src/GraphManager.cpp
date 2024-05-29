@@ -2,13 +2,34 @@
 
 #include "Node.h"
 #include "Engine.h"
-#include "threadpool/ThreadPool.hpp"
+#include "thread_pool.hpp"
 #include "TopologicalSort.h"
 #include "JudgmentCycle.h"
 
 GraphManager::GraphManager(): engine_{std::make_shared<Engine>()},
                               judgment_cycle_{std::make_shared<JudgmentCycle>()},
                               topo_sort_{nullptr} {
+  std::cout << "GraphManager()\n";
+}
+
+GraphManager::GraphManager(EngineType const& engin_type): judgment_cycle_{std::make_shared<JudgmentCycle>()},
+                              topo_sort_{nullptr} {
+  switch (engin_type)
+  {
+  case EngineType::GRAPH_ENGINE :
+    /* code */
+    engine_ = std::make_shared<Engine>();
+    break;
+  
+  case EngineType::REGION_ENGINE :
+    /* code */
+    engine_ = std::make_shared<Engine>(true);
+    break;
+
+  default:
+    break;
+  }
+   
   std::cout << "GraphManager()\n";
 }
 
