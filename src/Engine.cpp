@@ -86,7 +86,7 @@ void Engine::node_run(Node* const& node) {
 
 void Engine::node_run_after(Node* const& node) {
   for (auto node_after : node->GetRightNode()) {
-    if (node_after->GetIndegree() <= 0) {
+    if (node_after->GetIndegreeDecrease() == 0) {
       std::cout << node->GetNodeName() << " right node: " << node_after->GetNodeName() << " indegree is 0\n";
       thread_pool_ptr_->Commit(std::bind(&Engine::node_run, this, node_after));
     }

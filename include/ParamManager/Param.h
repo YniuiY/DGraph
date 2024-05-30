@@ -15,6 +15,8 @@ class Param {
     topic_ = "";
     timestamp_ = 0;
     frame_id_ = 0;
+    data_ = nullptr;
+    data_size_ = 0;
   }
   ~Param() {
     
@@ -56,16 +58,32 @@ class Param {
     return frame_id_;
   }
 
+  virtual void SetData(std::uint8_t* data, std::size_t size) {
+    data_ = data;
+    data_size_ = size;
+  }
+
+  virtual std::uint8_t* GetData() const {
+    return data_;
+  }
+
   virtual void Clear() {
     topic_ = "";
     timestamp_ = 0;
     frame_id_ = 0;
+    data_size_ = 0;
+    if (data_) {
+      delete data_;
+      data_ = nullptr;
+    }
   }
 
  private:
   std::string topic_;
   uint64_t timestamp_;
   uint32_t frame_id_;
+  std::uint8_t* data_;
+  std::size_t data_size_;
 };
 
 } // namespace dgraph

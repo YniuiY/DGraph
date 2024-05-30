@@ -63,6 +63,8 @@ class Node {
 
   int GetIndegree();
 
+  int GetIndegreeDecrease(); // 获取入度减一后的值
+
   void IndegreeDecrease(); // 入度减一
 
   int& GetLeftDepCount();

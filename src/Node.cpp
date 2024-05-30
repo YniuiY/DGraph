@@ -43,9 +43,9 @@ void Node::RunAfter() {
   // 节点执行完成后，给依赖此节点的后驱节点依赖项减一
   std::cout << "Node: " << node_name_ << " run after" << std::endl;
 
-  for (auto node : right_be_dependency_node_) {
-    node->IndegreeDecrease(); // TODO:给indegree的加减加锁
-  }
+  // for (auto node : right_be_dependency_node_) {
+  //   node->IndegreeDecrease(); // TODO:给indegree的加减加锁
+  // }
   // 运行结束后重置本节点入度
   indegree_reset();
 
@@ -107,6 +107,12 @@ std::set<Node*> Node::GetLeftNode() {
 int Node::GetIndegree() {
   std::lock_guard<std::mutex> lock(indegree_mutex_);
   return indegree_;
+}
+
+int Node::GetIndegreeDecrease() {
+  std::lock_guard<std::mutex> lock(indegree_mutex_);
+  std::cout << "Node: " << node_name_ << " indegree decrease: " << indegree_ - 1 << std::endl;
+  return --indegree_;
 }
 
 int& Node::GetLeftDepCount() {

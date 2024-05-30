@@ -48,6 +48,9 @@ void DGraph::Run() {
   std::cout << "DGraph Running\n";
   std::cout << "total node count: " << graph_manager_->GetNodeCount()
             << std::endl;
+  std::cout << "\n\n\n****************************** ******* *********************************\n";
+  std::cout << "****************************** Running *********************************\n";
+  std::cout << "****************************** ******* *********************************\n\n\n";
   graph_manager_->Run();
   std::cout << "DGraph Running Done\n";
 }

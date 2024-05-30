@@ -102,12 +102,12 @@ void TopologicalSort::PrintOrder() {
   std::cout << std::endl;
 
   std::cout << "\n******************************\n\n";
-  std::stack<Node*> stack{reverse_post_order_};
-  std::cout << "Reverse post order: ";
-  while (!stack.empty()) {
-    auto node = stack.top();
-    stack.pop();
-    std::cout << node->GetNodeName() << " ";
-  }
-  std::cout << std::endl;
+  // std::stack<Node*> stack{reverse_post_order_};
+  // std::cout << "Reverse post order: ";
+  // while (!stack.empty()) {
+  //   auto node = stack.top();
+  //   stack.pop();
+  //   std::cout << node->GetNodeName() << " ";
+  // }
+  // std::cout << std::endl;
 }

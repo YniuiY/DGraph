@@ -7,6 +7,7 @@
 int main() {
   try {
     Node* vio = nullptr;
+    Node* vio_free = nullptr;
     Node* gdc = nullptr;
     Node* pym = nullptr;
     Node* h265_input = nullptr;
@@ -22,8 +23,9 @@ int main() {
     std::shared_ptr<DGraph> graph = std::make_shared<DGraph>();
     graph->RegisterNode<Vio>(vio, {}, "Vio");
     graph->RegisterNode<Gdc>(gdc, {vio}, "Gdc");
-    graph->RegisterNode<Pym>(pym, {gdc}, "Pym");
-    graph->RegisterNode<H265Input>(h265_input, {gdc}, "H265Input");
+    graph->RegisterNode<VioFree>(vio_free, {gdc}, "VioFree");
+    graph->RegisterNode<Pym>(pym, {vio_free}, "Pym");
+    graph->RegisterNode<H265Input>(h265_input, {vio_free}, "H265Input");
     graph->RegisterNode<GdcFree>(gdc_free, {h265_input, pym}, "GdcFree");
     graph->RegisterNode<H265Output>(h265_output, {h265_input}, "H265Output");
     graph->RegisterNode<Roi0>(roi0, {pym}, "Roi0");
