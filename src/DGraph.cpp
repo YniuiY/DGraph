@@ -18,9 +18,9 @@ void DGraph::Init() {
   std::cout << "DGraph Init\n";
 
   // init thread pool
-  int maxCount = 16;
-  int coreCount = 8;
-  int taskQueueLength = 1000;
+  int maxCount = 20;
+  int coreCount = 18;
+  int taskQueueLength = 200;
   Policy policy = Discard;
   int liveTime = 20;
   ThreadPool::Unit unit = ThreadPool::Unit::Second;

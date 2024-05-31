@@ -29,19 +29,19 @@ void Node::Process() {
 
 void Node::run() {
   // 不同的节点重新不同的run实现
-  std::cout << "Node run\n";
+  // std::cout << "Node run\n";
 }
 
 void Node::RunBefore() {
   // 节点运行前设置节点状态为running
   node_state_ = NodeState::RUNNING;
-  std::cout << "Node: " << node_name_ << " run before" << std::endl;
+  // std::cout << "Node: " << node_name_ << " run before" << std::endl;
 }
 
 void Node::RunAfter() {
   node_state_ = NodeState::RUNNING_DONE;
   // 节点执行完成后，给依赖此节点的后驱节点依赖项减一
-  std::cout << "Node: " << node_name_ << " run after" << std::endl;
+  // std::cout << "Node: " << node_name_ << " run after" << std::endl;
 
   // for (auto node : right_be_dependency_node_) {
   //   node->IndegreeDecrease(); // TODO:给indegree的加减加锁

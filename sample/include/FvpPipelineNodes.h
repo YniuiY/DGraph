@@ -51,9 +51,7 @@ class Gdc : public Node {
     gdc_data.SetTopic(GdcTopic);
     dgraph::ParamManager::GetInstance().SetParam<dgraph::Param>(GdcTopic, gdc_data);
 
-    std::cout << "Gdc output image, ptr: " << std::hex << (std::uint64_t)gdc_data.GetData() << std::endl;
-
-    std::cout << "Gdc run over" << std::endl;
+    std::cout << "Gdc run over, output image, ptr: " << std::hex << (std::uint64_t)gdc_data.GetData() << std::endl;
   }
 
   std::uint8_t* gdc_image_ = nullptr;
@@ -108,9 +106,7 @@ class Pym : public Node {
     pym_data.SetTopic(PymTopic);
     dgraph::ParamManager::GetInstance().SetParam<dgraph::Param>(PymTopic, pym_data);
 
-    std::cout << "Pym output image, ptr: " << std::hex << (std::uint64_t)pym_data.GetData() << std::endl;
-
-    std::cout << "Pym run over" << std::endl;
+    std::cout << "Pym run over, output image, ptr: " << std::hex << (std::uint64_t)pym_data.GetData() << std::endl;
   }
 
   std::int64_t timestamp_;
@@ -145,8 +141,7 @@ class H265Input : public Node {
 class H265Output : public Node {
   void run() override {
     std::cout << "H265Output running" << std::endl;
-    std::cout << "H265Output run over" << std::endl;
-    std::cout << "Callback H265\n";
+    std::cout << "H265Output callback H265, run over" << std::endl;
   }
 };
 
@@ -157,8 +152,7 @@ class Roi0 : public Node {
     dgraph::Param* pym_data = dgraph::ParamManager::GetInstance().GetParam<dgraph::Param>(PymTopic);
     std::cout << "Roi0 get gdc image, ptr: " << std::hex << (std::uint64_t)pym_data->GetData() << std::endl;
 
-    std::cout << "ROI0 run over" << std::endl;
-    std::cout << "Callback Roi0\n";
+    std::cout << "ROI0 callback Roi0 output, run over" << std::endl;
   }
 };
 
@@ -169,8 +163,7 @@ class Roi1 : public Node {
     dgraph::Param* pym_data = dgraph::ParamManager::GetInstance().GetParam<dgraph::Param>(PymTopic);
     std::cout << "Roi1 get gdc image, ptr: " << std::hex << (std::uint64_t)pym_data->GetData() << std::endl;
 
-    std::cout << "ROI1 run over" << std::endl;
-    std::cout << "Callback Roi1\n";
+    std::cout << "ROI1 callback Roi1 output, run over" << std::endl;
   }
 };
 
@@ -181,8 +174,7 @@ class Roi2 : public Node {
     dgraph::Param* pym_data = dgraph::ParamManager::GetInstance().GetParam<dgraph::Param>(PymTopic);
     std::cout << "Roi2 get gdc image, ptr: " << std::hex << (std::uint64_t)pym_data->GetData() << std::endl;
 
-    std::cout << "ROI2 run over" << std::endl;
-    std::cout << "Callback Roi2\n";
+    std::cout << "ROI2 callback Roi1 output, run over" << std::endl;
   }
 };
 
@@ -193,14 +185,12 @@ class Roi3 : public Node {
     dgraph::Param* pym_data = dgraph::ParamManager::GetInstance().GetParam<dgraph::Param>(PymTopic);
     std::cout << "Roi3 get gdc image, ptr: " << std::hex << (std::uint64_t)pym_data->GetData() << std::endl;
 
-    std::cout << "ROI3 run over" << std::endl;
-    std::cout << "Callback Roi3\n";
+    std::cout << "ROI3 callback Roi1 output, run over" << std::endl;
   }
 };
 
 class Sink : public Node {
   void run() override {
-    std::cout << "Sink running" << std::endl;
     std::cout << "Sink run over" << std::endl;
   }
 };

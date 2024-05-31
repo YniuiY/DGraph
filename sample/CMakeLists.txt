@@ -77,7 +77,7 @@ set(DGRAPH_TUTORIAL_LIST
   sample
   sample-region
   sample-fvp
-  sample-2_task
+  sample-line-task
 )
 
 foreach(tut ${DGRAPH_TUTORIAL_LIST})
