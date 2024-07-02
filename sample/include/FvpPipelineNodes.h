@@ -16,6 +16,7 @@ class Vio : public Node {
     std::cout << "Vio running\n";
     while (dgraph::TimeUtil::TimeNow() - timestamp_ < time_interval_) {
       std::this_thread::sleep_for(std::chrono::milliseconds(33));
+      // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 
     timestamp_ = dgraph::TimeUtil::TimeNow();

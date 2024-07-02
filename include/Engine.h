@@ -55,7 +55,10 @@ class Engine {
   std::condition_variable cv_;                    // 阻塞Run函数的条件变量 
   std::mutex mtx_;                                // 
   int finished_node_num_;                         // 运行结束的节点数量
-  bool is_region_;                                  // 是否为Region引擎
+  bool is_region_;                                // 是否为Region引擎
+  std::atomic<int> runable_entry_node_num_;       // 入口节点可运行次数
+  std::condition_variable entry_cv_;              // 阻塞对入口节点循环调用的条件变量
+  std::mutex entry_mtx_;                          //
 };
 
 #endif

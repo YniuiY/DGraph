@@ -8,14 +8,16 @@
 Engine::Engine() : is_running_(false),
                    thread_pool_ptr_(nullptr),
                    finished_node_num_{0},
-                   is_region_{false} {
+                   is_region_{false},
+                   runable_entry_node_num_{0} {
 
 }
 
 Engine::Engine(bool is_region) : is_running_(false),
                    thread_pool_ptr_(nullptr),
                    finished_node_num_{0},
-                   is_region_{is_region} {
+                   is_region_{is_region},
+                   runable_entry_node_num_{0} {
   
 }
 
@@ -55,10 +57,21 @@ void Engine::Run() {
       while (is_running_) {
         for (auto node : entry_nodes_) {
           if (node->IsRunable()) {
+            --runable_entry_node_num_;
+            std::cout << "--runable_entry_node_num_: " << runable_entry_node_num_ << std::endl;
             thread_pool_ptr_->Commit(std::bind(&Engine::node_run, this, node));
           }
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+        // 如果入口节点执行快于后续DAG节点，不会进入阻塞，Engine一直运行
+        // 如果入口节点执行慢于后续DAG节点，会进入阻塞，等待至少一个入口节点执行完成
+        if (runable_entry_node_num_ <= 0) {
+          std::unique_lock<std::mutex> lk(entry_mtx_);
+          if (runable_entry_node_num_ <= 0) {
+            std::cout << "runable_entry_node_num_ is: " << runable_entry_node_num_ << " waitting..." << std::endl;
+            entry_cv_.wait(lk);
+          }
+        }
       }
     }
   }
@@ -92,15 +105,23 @@ void Engine::node_run_after(Node* const& node) {
     }
   }
 
+  // 如果节点是入口节点，通知阻塞的Run函数
+  if (node->IsEntryNode()) {
+    std::unique_lock<std::mutex> lk(entry_mtx_);
+    runable_entry_node_num_++;
+    std::cout << "runable_entry_node_num_: " << runable_entry_node_num_ << "\n";
+    entry_cv_.notify_one();
+  }
+
   if (is_region_ && ++finished_node_num_ >= node_set_.size() && node->GetRightNode().size() <= 0) {
     // 如果是Region的engine，执行完最后一个节点通知阻塞的Run函数
     // 没有后驱节点 且 node_set中全部节点都执行完毕
     // 通知GraphManager，结束阻塞
     cv_.notify_one();
   }
-  if (node->GetRightNode().size() <= 0) {
-    std::cout << "\n\n************ Fvp Loop Once ************\n\n";
-  }
+  // if (node->GetRightNode().size() <= 0) {
+  //   std::cout << "\n\n************ Loop Once ************\n\n";
+  // }
   // std::cout << "finished_node_num_: " << finished_node_num_ << " total node size: " << node_set_.size() << "\n";
 }
 
@@ -112,6 +133,7 @@ void Engine::find_entry_node() {
     if (node->GetIndegree() == 0) {
       if (node->GetRightNode().size() > 0) {
         entry_nodes_.emplace_back(node);
+        node->SetEntryNode(true);
         std::cout << "entry node: " << node->GetNodeName() << "\n";
       } else {
         alone_nodes_.emplace_back(node);
@@ -119,4 +141,7 @@ void Engine::find_entry_node() {
       }
     }
   }
+
+  runable_entry_node_num_ = entry_nodes_.size();
+  std::cout << "init runable_entry_node_num_: " << runable_entry_node_num_ << "\n";
 }

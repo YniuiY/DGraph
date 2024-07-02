@@ -7,9 +7,8 @@
 Node::Node()
     : left_dep_count_{0},
       loop_count_{1},
-      node_state_{NodeState::CREATED} {
-
-}
+      node_state_{NodeState::CREATED},
+      is_entry_node_{false} {}
 
 Node::~Node() {
   std::cout << "~Node(): " << node_name_ << std::endl;
@@ -142,6 +141,14 @@ void Node::SetThreadPool(std::shared_ptr<ThreadPool> const& tp) {
 void Node::IndegreeDecrease() {
   std::lock_guard<std::mutex> lock(indegree_mutex_);
   --indegree_;
+}
+
+void Node::SetEntryNode(bool is_entry) {
+  is_entry_node_ = is_entry;
+}
+
+bool Node::IsEntryNode() const {
+  return is_entry_node_;
 }
 
 void Node::indegree_reset() {

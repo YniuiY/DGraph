@@ -75,6 +75,12 @@ class Node {
 
   void SetThreadPool(std::shared_ptr<ThreadPool> const& tp);
 
+  /// @brief 设置节点类型为入口节点
+  void SetEntryNode(bool is_entry_node);
+
+  /// @brief 判断是否为入口节点
+  bool IsEntryNode() const;
+
  private:
   virtual void run();
 
@@ -113,6 +119,9 @@ class Node {
 
   /// @brief 循环次数
   int loop_count_;
+
+  // @brief 入口节点
+  bool is_entry_node_;
 
  protected:
   std::shared_ptr<ThreadPool> tp_;
