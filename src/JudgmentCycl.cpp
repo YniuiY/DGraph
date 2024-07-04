@@ -17,7 +17,7 @@ JudgmentCycle::JudgmentCycle(): is_cycle_{false}, marked_{nullptr}, on_stack_{nu
 }
 
 JudgmentCycle::~JudgmentCycle() {
-  std::cout << "~JudgmentCycle()\n";
+  dgraph::Logger::GetLogger()->info("JudgmentCycle::~JudgmentCycle()");
 }
 
 void JudgmentCycle::Init(std::set<Node*> const& node_set) {
@@ -29,14 +29,14 @@ bool JudgmentCycle::HasCycle() {
   if (is_cycle_) {
     CycleNodes();
   } else {
-    std::cout << "### This graph is DAG ###\n";
-    std::cout << "### Graph Order:";
+    dgraph::Logger::GetLogger()->debug("### This graph is DAG ###");
     std::stack<Node*> order = node_order_;
+    std::string node_order_str;
     while (!order.empty()) {
-      std::cout <<  " " << order.top()->GetNodeName();
+      node_order_str += order.top()->GetNodeName() + " ";
       order.pop();
     }
-    std::cout << " ###\n";
+    dgraph::Logger::GetLogger()->debug("### Graph Order: " + node_order_str + " ###");
   }
   return is_cycle_;
 }
@@ -56,14 +56,14 @@ void JudgmentCycle::check_cycle() {
 void JudgmentCycle::dfs(Node* const& node) {
   marked_.emplace(node);
   on_stack_.emplace(node);
-  std::cout << "marked node: " << node->GetNodeName() << std::endl;
+  dgraph::Logger::GetLogger()->debug("marked node: " + node->GetNodeName());
 
   for (auto right_node : node->GetRightNode()) {
     if (is_cycle_) {
       return;
     } else if (marked_.find(right_node) == marked_.end()) { //节点未被遍历过
       edge_to_[right_node->GetNodeName()] = node->GetNodeName();
-      std::cout << "edge_to[" << right_node->GetNodeName() << "]: " << node->GetNodeName() << std::endl;
+      dgraph::Logger::GetLogger()->debug("edge_to[" + right_node->GetNodeName() + "]: " + node->GetNodeName());
       dfs(right_node);
     } else if (on_stack_.find(right_node) != on_stack_.end()) { // 节点被遍历过且目前存在与dfs遍历调用栈中
       // 下一个节点在调用栈中
@@ -91,17 +91,18 @@ void JudgmentCycle::CycleNodes() {
   /**
    * @todo 打印所有成环节点的名字
    */
-  std::cout << "### Cycle Nodes:";
+  std::string cycle_node_str = cycle_node_.top();
+  cycle_node_.pop();
   while (!cycle_node_.empty()) {
-    std::cout << " " << cycle_node_.top();
+    cycle_node_str += " -> " + cycle_node_.top();
     cycle_node_.pop();
   }
-  std::cout << " ###\n";
+  dgraph::Logger::GetLogger()->warn("### Cycle Nodes: " + cycle_node_str + " ###");
 }
 
 std::stack<Node*> JudgmentCycle::GetOrderNodeStack() {
   if (is_cycle_) {
-    std::cout << "有环图无法对拓扑排序" << std::endl;
+    dgraph::Logger::GetLogger()->warn("### This graph has cycle ###");
     throw std::runtime_error("cycle graph don't have order");
   }
   return node_order_;
@@ -140,8 +141,9 @@ void JudgmentCycle::bfs(Node* const& node) {
   }
 
   // 打印BFS的顺序
-  std::cout << "### BFS Front Order:";
+  std::string bfs_front_order_str;
   for (auto const& node : bfs_front_order) {
-    std::cout << node << " ";
+    bfs_front_order_str += node + " ";
   }
+  dgraph::Logger::GetLogger()->debug("### BFS Front Order: " + bfs_front_order_str + " ###");
 }

@@ -57,7 +57,8 @@ ELSEIF(DEFINED COMPILE_TOOLCHAIN_ROOT_12_1_1)
 ELSE()
   # add_definitions("-Wall -g")
   # add_definitions("-Wall -O2")
-  link_directories(${PROJECT_SOURCE_DIR}/3rd-party/ThreadPool/x86_lib)
+  link_directories(${PROJECT_SOURCE_DIR}/../3rd-party/ThreadPool/x86_lib)
+  link_directories(${PROJECT_SOURCE_DIR}/../3rd-party/spdlog/lib)
 ENDIF()
 
 
@@ -70,6 +71,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--disable-new-dtags")
 link_directories(${PROJECT_SOURCE_DIR}/../output/DGraph/lib)
 
 include_directories(${PROJECT_SOURCE_DIR}/include
+                    ${PROJECT_SOURCE_DIR}/../3rd-party/spdlog/include
                     ${PROJECT_SOURCE_DIR}/../output/DGraph/include)
 
 
@@ -82,5 +84,5 @@ set(DGRAPH_TUTORIAL_LIST
 
 foreach(tut ${DGRAPH_TUTORIAL_LIST})
     add_executable(${tut} ./src/${tut}.cpp)
-    target_link_libraries(${tut} dgraph thread_pool pthread)
+    target_link_libraries(${tut} dgraph thread_pool pthread spdlog)
 endforeach()

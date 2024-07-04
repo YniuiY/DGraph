@@ -90,8 +90,8 @@ int main() {
     graph->Run();
     graph->Deinit();
 
+    dgraph::Logger::GetLogger()->info("Graph run over");
     return 0;
-    std::cout << "Run Over\n";
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
     return -1;

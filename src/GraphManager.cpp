@@ -9,7 +9,7 @@
 GraphManager::GraphManager(): engine_{std::make_shared<Engine>()},
                               judgment_cycle_{std::make_shared<JudgmentCycle>()},
                               topo_sort_{nullptr} {
-  std::cout << "GraphManager()\n";
+  dgraph::Logger::GetLogger()->info("GraphManager()");
 }
 
 GraphManager::GraphManager(EngineType const& engin_type): judgment_cycle_{std::make_shared<JudgmentCycle>()},
@@ -29,12 +29,11 @@ GraphManager::GraphManager(EngineType const& engin_type): judgment_cycle_{std::m
   default:
     break;
   }
-   
-  std::cout << "GraphManager()\n";
+  dgraph::Logger::GetLogger()->info("GraphManager()");
 }
 
 GraphManager::~GraphManager() {
-  std::cout << "~GraphManager()\n";
+  dgraph::Logger::GetLogger()->info("~GraphManager()");
   for (auto node: node_set_) {
     if (node != nullptr) {
       delete node;
@@ -44,19 +43,19 @@ GraphManager::~GraphManager() {
 }
 
 void GraphManager::Init() {
-  std::cout << "GraphManager Init\n";
+  dgraph::Logger::GetLogger()->info("GraphManager Init()");
   engine_->Init(node_set_, thread_pool_);
   for (auto node: node_set_) {
     node->SetThreadPool(thread_pool_);
     node->Init();
   }
-  std::cout << "GraphManager Init Done\n";
+  dgraph::Logger::GetLogger()->info("GraphManager Init() Done");
 }
 
 void GraphManager::Run() {
-  std::cout << "GraphManager Running\n";
+  dgraph::Logger::GetLogger()->info("GraphManager Run()");
   engine_->Run();
-  std::cout << "GraphManager Running Done\n";
+  dgraph::Logger::GetLogger()->info("GraphManager Run() Done");
 }
 
 void GraphManager::Deinit() {

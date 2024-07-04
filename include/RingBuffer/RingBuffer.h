@@ -9,6 +9,8 @@
 #include <atomic>
 #include <iostream>
 
+#include "Utils/Logger.h"
+
 template <class Type, uint32_t size>
 class RingBuffer {
  public:
@@ -25,6 +27,7 @@ class RingBuffer {
       // 写索引和读索引之间空一个元素
       // 队满
       std::cout << "Ring Buffer is Full\n";
+      dgraph::Logger::GetLogger()->debug("Ring Buffer is Full\n");
       return false;
     }
     data_.at(write_) = item;
@@ -41,10 +44,12 @@ class RingBuffer {
       // 写索引和读索引之间空一个元素
       // 队满，覆盖最早的数据
       read_ = (read_ + 1) % size_;
+      dgraph::Logger::GetLogger()->debug("Ring buffer is full, overwriting the oldest data. read index: " + std::to_string(read_));
       std::cout << "Warning: Ring Buffer is full, overwriting the oldest data."
                 << std::endl;
       std::cout << "read index: " << read_ << std::endl;
     }
+    dgraph::Logger::GetLogger()->debug("write index: " + std::to_string(write_));
     std::cout << "write index: " << write_ << std::endl;
     data_.at(write_) = item;
     write_ = (write_ + 1) % size_;
@@ -58,6 +63,7 @@ class RingBuffer {
     Type* item = nullptr;
     if (write_ == read_) {
       // 队空
+      dgraph::Logger::GetLogger()->debug("RingBuffer is Empty\n");
       std::cout << "RingBuffer is Empty\n";
       return item;
     }

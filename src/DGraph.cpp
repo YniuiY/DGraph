@@ -7,16 +7,14 @@
 #include "thread_pool.hpp"
 
 DGraph::DGraph(): graph_manager_{std::make_shared<GraphManager>()} {
-
+  dgraph::Logger::GetLogger()->debug("DGraph()");
 }
 
 DGraph::~DGraph() {
-  std::cout << "~DGraph()\n";
+  dgraph::Logger::GetLogger()->debug("~DGraph()");
 }
 
 void DGraph::Init() {
-  std::cout << "DGraph Init\n";
-
   // init thread pool
   int maxCount = 20;
   int coreCount = 18;
@@ -25,15 +23,13 @@ void DGraph::Init() {
   int liveTime = 20;
   ThreadPool::Unit unit = ThreadPool::Unit::Second;
 
-  std::cout << "\n**************************************************"
-            << "\nInit thread pool:\nmax thread count: " << maxCount
-            << "\ncore thread count: " << coreCount
-            << "\ntask queu length: " << taskQueueLength
-            << "\npolicy: " << policy
-            << "\nempty thread live time: " << liveTime
-            << "\nlive time unit: " << unit
-            << "\n*************************************************\n"
-            << std::endl;
+  dgraph::Logger::GetLogger()->debug(
+      "Init thread pool:\nmax thread count: " + std::to_string(maxCount) +
+      ", core thread count: " + std::to_string(coreCount) +
+      ", task queu length: " + std::to_string(taskQueueLength) +
+      ", policy: " + std::to_string(policy) +
+      ", empty thread live time: " + std::to_string(liveTime) +
+      ", live time unit: " + std::to_string(unit));
   thread_pool_ = std::make_shared<ThreadPool>(
       maxCount, coreCount, taskQueueLength, policy, liveTime, unit);
 
@@ -41,22 +37,21 @@ void DGraph::Init() {
   graph_manager_->Init();
   check_cycle();
   topological_sort();
-  std::cout << "DGraph Init Done\n";
+  dgraph::Logger::GetLogger()->debug("DGraph Init Done");
 }
 
 void DGraph::Run() {
-  std::cout << "DGraph Running\n";
-  std::cout << "total node count: " << graph_manager_->GetNodeCount()
-            << std::endl;
+  dgraph::Logger::GetLogger()->debug("DGraph Running");
+  dgraph::Logger::GetLogger()->debug("total node count: " + std::to_string(graph_manager_->GetNodeCount()));
   std::cout << "\n\n\n****************************** ******* *********************************\n";
   std::cout << "****************************** Running *********************************\n";
   std::cout << "****************************** ******* *********************************\n\n\n";
   graph_manager_->Run();
-  std::cout << "DGraph Running Done\n";
+  dgraph::Logger::GetLogger()->debug("DGraph Running Done");
 }
 
 void DGraph::Deinit() {
-  std::cout << "DGraph Deinit\n";
+  dgraph::Logger::GetLogger()->debug("DGraph Deinit");
   graph_manager_->Deinit();
 }
 
@@ -64,7 +59,7 @@ bool DGraph::RegisterNode(
     Node*& node,
     std::set<Node*> const& dependency_nodes,
     const std::string node_name) {
-  std::cout << "Graph register: " << node_name << std::endl;
+  dgraph::Logger::GetLogger()->debug("Graph register: " + node_name);
 
   node->SetNodeName(node_name);
   node->AddDependencyNodes(dependency_nodes);
@@ -77,7 +72,7 @@ bool DGraph::RegisterNode(
     std::set<Node*> const& dependency_nodes,
     const std::string node_name,
     int const& loop_count) {
-  std::cout << "Graph register: " << node_name << std::endl;
+  dgraph::Logger::GetLogger()->debug("Graph register: " + node_name);
 
   node->SetNodeName(node_name);
   node->AddDependencyNodes(dependency_nodes);
@@ -88,9 +83,9 @@ bool DGraph::RegisterNode(
 
 void DGraph::check_cycle() {
   if (!graph_manager_->HasCycle()) {
-    std::cout << "### Graph has no cycle ###\n";
+    dgraph::Logger::GetLogger()->debug("### Graph has no cycle ###");
   } else {
-    std::cout << "### Graph has cycle ###\n";
+    dgraph::Logger::GetLogger()->error("### Graph has cycle ###");
     throw std::runtime_error("Graph has cycle");
   }
 }

@@ -10,6 +10,9 @@
 int main() {
   try {
    #if TEST_DIRECTED_GRAPH_1
+    dgraph::Logger::Init("logs/line_task.log");
+    auto logger{dgraph::Logger::GetLogger()};
+    logger->debug("Start Line Task");
     Node* a = nullptr;
     Node* b = nullptr;
     Node* c = nullptr;
@@ -34,8 +37,8 @@ int main() {
     graph->Run();
     graph->Deinit();
 
+    logger->debug("End Line Task");
     return 0;
-    std::cout << "Run Over\n";
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
     return -1;

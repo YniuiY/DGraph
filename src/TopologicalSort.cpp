@@ -11,7 +11,7 @@ TopologicalSort::TopologicalSort(std::set<Node*> adjs) {
 }
 
 TopologicalSort::~TopologicalSort() {
-  std::cout << "~TopologicalSort()\n";
+  dgraph::Logger::GetLogger()->info("~TopologicalSort()");
 }
 
 std::vector<Node*> TopologicalSort::Sort() {
@@ -48,10 +48,12 @@ std::vector<Node*> TopologicalSort::Sort() {
    * 所以topological_order_的元素少于adjs_的元素数，就可以证明有环
    */
   if (topological_order_.size() != adjs_.size()) {
-    std::cout << "topological order node: " << topological_order_.size() << ", adjs node: " << adjs_.size() << std::endl;
+    dgraph::Logger::GetLogger()->warn(
+        "Graph has cycle!. Topological order node: " +
+        std::to_string(topological_order_.size()) +
+        ", adjs node: " + std::to_string(adjs_.size()));
     throw std::runtime_error("There is a cycle in the graph.");
   } else {
-
     return topological_order_;
   }
 }
@@ -95,11 +97,12 @@ void TopologicalSort::dfs(Node* node) {
 
 void TopologicalSort::PrintOrder() {
   std::vector<Node*> queue{topological_order_};
-  std::cout << "Topological order: ";
+  std::string topo_order_str;
   for (auto node : topological_order_) {
-    std::cout << node->GetNodeName() << " ";
+    topo_order_str += node->GetNodeName() + " ";
   }
-  std::cout << std::endl;
+  dgraph::Logger::GetLogger()->debug
+    ("Topological order: " + topo_order_str);
 
   std::cout << "\n******************************\n\n";
   // std::stack<Node*> stack{reverse_post_order_};

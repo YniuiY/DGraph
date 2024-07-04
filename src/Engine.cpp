@@ -22,19 +22,19 @@ Engine::Engine(bool is_region) : is_running_(false),
 }
 
 Engine::~Engine() {
-  std::cout << "~Engine()\n";
+  dgraph::Logger::GetLogger()->debug("~Engine()");
 }
 
 void Engine::Init(std::set<Node*> const& node_set, std::shared_ptr<ThreadPool> const& thread_pool_ptr) {
-  std::cout << "Engine Init\n";
+  dgraph::Logger::GetLogger()->debug("Engine Init");
   node_set_ = node_set;
   thread_pool_ptr_ = thread_pool_ptr;
   find_entry_node();
-  std::cout << "Engine Init Done\n";
+  dgraph::Logger::GetLogger()->debug("Engine Init Done");
 }
 
 void Engine::Run() {
-  std::cout << "Engine Running\n";
+  dgraph::Logger::GetLogger()->debug("Engine Running");
   is_running_ = true;
 
   if (alone_nodes_.size() > 0) {
@@ -58,7 +58,9 @@ void Engine::Run() {
         for (auto node : entry_nodes_) {
           if (node->IsRunable()) {
             --runable_entry_node_num_;
-            std::cout << "--runable_entry_node_num_: " << runable_entry_node_num_ << std::endl;
+            dgraph::Logger::GetLogger()->info(
+                "--runable_entry_node_num_: " +
+                std::to_string(runable_entry_node_num_));
             thread_pool_ptr_->Commit(std::bind(&Engine::node_run, this, node));
           }
         }
@@ -68,15 +70,21 @@ void Engine::Run() {
         if (runable_entry_node_num_ <= 0) {
           std::unique_lock<std::mutex> lk(entry_mtx_);
           if (runable_entry_node_num_ <= 0) {
-            std::cout << "runable_entry_node_num_ is: " << runable_entry_node_num_ << " waitting..." << std::endl;
+            dgraph::Logger::GetLogger()->info(
+                "runable_entry_node_num_ is: "
+                + std::to_string(runable_entry_node_num_) + " waitting...");
             entry_cv_.wait(lk);
+            dgraph::Logger::GetLogger()->info(
+                "runable_entry_node_num_ is: "
+                + std::to_string(runable_entry_node_num_) + " waitting done");
           }
         }
+        // std::this_thread::sleep_for(std::chrono::milliseconds(1));
       }
     }
   }
 
-  std::cout << "Engine Running Done\n";
+  dgraph::Logger::GetLogger()->debug("Engine Running Done");
 }
 
 void Engine::Deinit() {
@@ -91,6 +99,7 @@ void Engine::run_before() {
 
 void Engine::node_run(Node* const& node) {
   if (node == nullptr) {
+    dgraph::Logger::GetLogger()->error("node is nullptr");
     std::runtime_error("node is nullptr");
   }
   node->Process();
@@ -100,7 +109,8 @@ void Engine::node_run(Node* const& node) {
 void Engine::node_run_after(Node* const& node) {
   for (auto node_after : node->GetRightNode()) {
     if (node_after->GetIndegreeDecrease() == 0) {
-      std::cout << node->GetNodeName() << " right node: " << node_after->GetNodeName() << " indegree is 0\n";
+      dgraph::Logger::GetLogger()->debug(
+          "right node: " + node_after->GetNodeName() + " indegree is 0");
       thread_pool_ptr_->Commit(std::bind(&Engine::node_run, this, node_after));
     }
   }
@@ -109,7 +119,9 @@ void Engine::node_run_after(Node* const& node) {
   if (node->IsEntryNode()) {
     std::unique_lock<std::mutex> lk(entry_mtx_);
     runable_entry_node_num_++;
-    std::cout << "runable_entry_node_num_: " << runable_entry_node_num_ << "\n";
+    dgraph::Logger::GetLogger()->info(
+        "++runable_entry_node_num_: " +
+        std::to_string(runable_entry_node_num_));
     entry_cv_.notify_one();
   }
 
@@ -134,14 +146,16 @@ void Engine::find_entry_node() {
       if (node->GetRightNode().size() > 0) {
         entry_nodes_.emplace_back(node);
         node->SetEntryNode(true);
-        std::cout << "entry node: " << node->GetNodeName() << "\n";
+        dgraph::Logger::GetLogger()->info("entry node: " + node->GetNodeName());
       } else {
         alone_nodes_.emplace_back(node);
-        std::cout << "alone node: " << node->GetNodeName() << "\n";
+        dgraph::Logger::GetLogger()->info("alone node: " + node->GetNodeName());
       }
     }
   }
 
   runable_entry_node_num_ = entry_nodes_.size();
-  std::cout << "init runable_entry_node_num_: " << runable_entry_node_num_ << "\n";
+  dgraph::Logger::GetLogger()->info(
+      "init runable_entry_node_num_: " +
+      std::to_string(runable_entry_node_num_));
 }

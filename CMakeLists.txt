@@ -55,6 +55,7 @@ ELSEIF(DEFINED COMPILE_TOOLCHAIN_ROOT_12_1_1)
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS} -O3 -Wall")
 ELSE()
   link_directories(${PROJECT_SOURCE_DIR}/3rd-party/ThreadPool/x86_lib)
+  link_directories(${PROJECT_SOURCE_DIR}/3rd-party/spdlog/lib)
   # add_definitions("-Wall -g")
   # add_definitions("-Wall -O2")
 ENDIF()
@@ -66,6 +67,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 
 include_directories(./include)
 include_directories(${PROJECT_SOURCE_DIR}/3rd-party/ThreadPool/include)
+include_directories(${PROJECT_SOURCE_DIR}/3rd-party/spdlog/include)
 
 aux_source_directory(./src SRCS)
 aux_source_directory(./src/ParamManager PARAM_SRCS)
@@ -74,7 +76,7 @@ aux_source_directory(./src/Utils UTIL_SRCS)
 
 add_library(dgraph SHARED ${SRCS} ${PARAM_SRCS} ${REGION_SRCS} ${UTIL_SRCS})
 
-target_link_libraries(dgraph thread_pool pthread)
+target_link_libraries(dgraph thread_pool pthread spdlog)
 
 if(INSTALL)
   set(OUTPUT "${PROJECT_SOURCE_DIR}/output/DGraph")

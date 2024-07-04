@@ -11,13 +11,13 @@ Region::Region():Node(), graph_manager_{std::make_shared<GraphManager>(GraphMana
 }
 
 Region::~Region() {
-  std::cout << "~Region()" << std::endl;
+  dgraph::Logger::GetLogger()->info("~Region");
 }
 
 bool Region::RegisterNode (Node*& node,
                            std::set<Node*> const& dependency_nodes,
                            const std::string node_name) {
-  std::cout << "Region register: " << node_name << std::endl;
+  dgraph::Logger::GetLogger()->debug("Region register: " + node_name);
 
   node->SetNodeName(node_name);
   node->AddDependencyNodes(dependency_nodes);
@@ -30,7 +30,7 @@ bool Region::RegisterNode(
     std::set<Node*> const& dependency_nodes,
     const std::string node_name,
     int const& loop_count) {
-  std::cout << "Region register: " << node_name << std::endl;
+  dgraph::Logger::GetLogger()->debug("Region register: " + node_name);
 
   node->SetNodeName(node_name);
   node->AddDependencyNodes(dependency_nodes);

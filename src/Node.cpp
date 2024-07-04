@@ -11,7 +11,7 @@ Node::Node()
       is_entry_node_{false} {}
 
 Node::~Node() {
-  std::cout << "~Node(): " << node_name_ << std::endl;
+  dgraph::Logger::GetLogger()->info("~Node(): " + node_name_);
 }
 
 void Node::Init() {
@@ -57,7 +57,7 @@ bool Node::IsRunable() {
   bool ret{false};
   // 节点前置依赖项为0 且 节点状态为初始状态，表示此节点可以被调度
   if (indegree_ == 0 && node_state_ == NodeState::INITED) {
-    std::cout << node_name_ << " is run able" << std::endl;
+    dgraph::Logger::GetLogger()->debug("Node: " + node_name_ + " is run able");
     ret = true;
     node_state_ = NodeState::RUNNING_WAITING;
   }
@@ -65,9 +65,9 @@ bool Node::IsRunable() {
 }
 
 void Node::AddDependencyNodes(std::set<Node*> const& node_set) {
-  std::cout << node_name_ << " dependency nodes: ";
+  std::string dep_nodes;
   for (auto node : node_set) {
-    std::cout << node->GetNodeName() << " ";
+    dep_nodes += node->GetNodeName() + " ";
     left_dependency_node_.emplace(node);  // 将此节点依赖的前置节点注册进来
     left_dep_count_++;  // 将此节点的依赖项加一，此依赖项归零便可以执行
     indegree_++;
@@ -76,7 +76,7 @@ void Node::AddDependencyNodes(std::set<Node*> const& node_set) {
     node->right_be_dependency_node_.emplace(
         this);  // 将依赖此节点的后驱节点注册进来
   }
-  std::cout << " indegree: " << indegree_ << std::endl;
+  dgraph::Logger::GetLogger()->debug(node_name_ + " dependency nodes: " + dep_nodes + ", indegree: " + std::to_string(indegree_));
 }
 
 void Node::SetNodeName(std::string const& name) {
@@ -110,7 +110,7 @@ int Node::GetIndegree() {
 
 int Node::GetIndegreeDecrease() {
   std::lock_guard<std::mutex> lock(indegree_mutex_);
-  std::cout << "Node: " << node_name_ << " indegree decrease: " << indegree_ - 1 << std::endl;
+  dgraph::Logger::GetLogger()->debug("Node: " + node_name_ + " indegree decrease: " + std::to_string(indegree_ - 1));
   return --indegree_;
 }
 

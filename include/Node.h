@@ -13,6 +13,8 @@
 #include <vector>
 #include <mutex>
 
+#include "Utils/Logger.h"
+
 class ThreadPool;
 class Node {
  public:

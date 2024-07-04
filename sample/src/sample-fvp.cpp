@@ -6,6 +6,10 @@
 
 int main() {
   try {
+    dgraph::Logger::Init("logs/fvp-pipeline.log");
+    auto logger{dgraph::Logger::GetLogger()};
+
+    logger->debug("Starting FVP pipeline");
     Node* vio = nullptr;
     Node* vio_free = nullptr;
     Node* gdc = nullptr;
@@ -39,8 +43,8 @@ int main() {
     graph->Run();
     graph->Deinit();
 
+    logger->debug("FVP pipeline finished");
     return 0;
-    std::cout << "Run Over\n";
   } catch (std::exception const& e) {
     std::cerr << e.what() << std::endl;
     return -1;
